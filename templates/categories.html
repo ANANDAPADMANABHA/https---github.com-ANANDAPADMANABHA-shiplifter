@@ -1,0 +1,51 @@
+{% extends 'adminbase.html' %}
+
+{% block content %}
+    <!-- Content Header (Page header) -->
+    <div class="content-header sty-one">
+      <h1 class="text-white">Basic Tables</h1>
+      <a href="addcategory"><button type="submit" class="btn btn-warning">Add categoory</button></a>
+      <ol class="breadcrumb">
+        <li><a href="adminhome">Home</a></li>
+        <li class="sub-bread"><i class="fa fa-angle-right"></i> Tables</li>
+        <li><i class="fa fa-angle-right"></i> Basic Tables</li>
+        
+
+      </ol>
+    </div>
+    
+        <hr class="m-t-1 m-b-3">
+        
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th scope="col">id</th>
+                <th scope="col">category name</th>
+                <th scope="col">description</th>
+                
+              </tr>
+            </thead>
+            <tbody>
+              {% for x in values %}
+              <tr>
+                <th scope="row">{{x.id}}</th>
+                <td>{{x.category_name}}</td>
+                <td>{{x.description}}</td>
+                
+                <td><a href="deletecategory/{{ x.id }}"><button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure to delete?')" >delete</button></a></td>
+
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- /.content --> 
+  
+    {% endblock %}

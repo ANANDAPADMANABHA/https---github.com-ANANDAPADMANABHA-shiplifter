@@ -1,0 +1,49 @@
+{% extends 'adminbase.html' %}
+
+{% block content %}
+<div class="your-order ">
+    <div class="d-flex justify-content-center" >
+                                        
+    <div class="table-responsive col-lg-10 ">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            
+            <th scope="col">Name</th>
+            <th scope="col">Phone_number</th>
+            <th scope="col">Total_price</th>
+            <th scope="col">Order_id</th>
+            <th scope="col">ordered_date</th>
+            <th scope="col">Order_status</th>
+            <th scope="col">View_order</th>
+            
+          </tr>
+        </thead>
+        <tbody>
+        {% for x in order %}
+          <tr>
+            
+            <td>{{x.address.firstname}}</td>
+            <td>{{x.address.phonenumber}}</td>
+            <td>{{x.ordertotal}}</td>
+            <td>{{x.orderid}}</td>
+            <td>{{x.date}}</td>
+            
+            
+
+            <td>{{x.status}}</td>
+            {% if x.status == 'Cancelled' %}
+            <td> <a href="" class="btn btn-primary">cancelled</a> </td>
+            {% else %}
+            <td> <a href="{% url 'ordercanceladmin' x.id %}" class="btn btn-primary">cancel</a> </td>
+            {% endif %}
+            
+          </tr>
+          {% endfor %}
+         
+        </tbody>
+      </table>
+    </div>
+</div>
+</div>
+{% endblock %}

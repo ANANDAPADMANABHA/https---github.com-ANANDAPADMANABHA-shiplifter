@@ -1,0 +1,63 @@
+{% extends 'adminbase.html' %}
+
+{% block content %}
+    <!-- Content Header (Page header) -->
+    <div class="content-header sty-one">
+      <h1 class="text-white">Basic Tables</h1>
+      <ol class="breadcrumb">
+        <li><a href="adminhome">Home</a></li>
+        <li class="sub-bread"><i class="fa fa-angle-right"></i> Tables</li>
+        <li><i class="fa fa-angle-right"></i> Basic Tables</li>
+      </ol>
+    </div>
+    
+        <hr class="m-t-1 m-b-3">
+        
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th scope="col">id</th>
+                <th scope="col">Username</th>
+                <th scope="col">First Name</th>
+                <th scope="col">Last Name</th>
+                <th scope="col">email</th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for x in values %}
+
+              {% if x.is_superuser  %} <!-- tp avoid viewing superuser in the users table-->
+              {% else %} <!-- tp avoid viewing superuser in the users table-->
+              <tr>
+                <th scope="row">{{x.id}}</th>
+                <td>{{x.username}}</td>
+                <td>{{x.first_name}}</td>
+                <td>{{x.last_name}}</td>
+                <td>{{x.email}}</td>
+                <!-- <td><a href="blockuser/{{ x.id }}"><button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure to delete?')" >block</button></a></td> -->
+                {% if x.is_active %}
+
+                    <td><a href="blockuser/{{x.id}}" class="btn btn-secondary btn-lg active " role="button" aria-pressed="true">BlockUser</a></td>
+                  {% else %}
+                    <td><a href="blockuser/{{x.id}}" class="btn btn-secondary btn-lg active" role="button" aria-pressed="true">UnblockUser</a></td>
+                  {% endif %}
+              </tr>
+              {% endif %}<!-- tp avoid viewing superuser in the users table-->
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- /.content --> 
+  </div>
+  <!-- /.content-wrapper -->
+  
+  {% endblock %}

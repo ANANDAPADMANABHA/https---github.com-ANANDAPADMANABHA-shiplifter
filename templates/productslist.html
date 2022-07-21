@@ -1,0 +1,82 @@
+
+
+{% extends 'adminbase.html' %}
+
+{% block content %}
+    <!-- Content Header (Page header) -->
+    <div class="content-header sty-one">
+      <h1 class="text-white">Product List</h1>
+      <a href="addproduct"><button type="submit" class="btn btn-warning">Add Product</button></a>
+      <ol class="breadcrumb">
+        <li><a href="adminhome">Home</a></li>
+        <li class="sub-bread"><i class="fa fa-angle-right"></i> Tables</li>
+        <li><i class="fa fa-angle-right"></i> Basic Tables</li>
+        
+      </ol>
+    </div>
+    
+        <hr class="m-t-1 m-b-3">
+        
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th scope="col">id</th>
+                <th scope="col">name</th>
+                <th scope="col">description</th>
+                <th scope="col">price</th>
+                <th scope="col">stock</th>
+                <th scope="col">category</th>
+                <th scope="col">image</th>
+                <th scope="col">Edit</th>
+                <th scope="col">Delete</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for x in productValues %}
+              <tr>
+
+                <th scope="row">{{x.id}}</th>
+                <td>{{x.name}}</td>
+                <td>{{x.description}}</td>
+                <td>{{x.price}}</td>
+                <td>{{x.stock}}</td>
+                <td>{{x.category}}</td>
+                <td><img src="{{x.image}}" alt="" class="img-fluid img-thumbnail" style="width:140px; height:160px"></td>
+                <td><a href="editproduct/{{ x.id }}"><button type="submit" class="btn btn-warning">edit</button></a></td>
+                <td><a href="delete/{{ x.id }}"><button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure to delete?')" >delete</button></a></td>
+                
+              </tr>
+              {% endfor %}
+
+            </tbody>
+
+          </table>
+          <nav aria-label="Page navigation example">
+            <ul class="pagination">
+            {% if productValues.has_previous %}
+            
+            <li class="page-item"><a class="page-link" href="?page={{ productValues.previous_page_number }}">Previous</a></li>
+            
+            {% endif %}
+            <li class="page-item"><a class="page-link" href="#">Page {{productValues.number}} of {{productValues.paginator.num_pages}}</a></li>
+            
+            {% if productValues.has_next %}
+            <li class="page-item"><a class="page-link" href="?page={{productValues.next_page_number}}">Next</a></li>
+            
+          {% endif %}
+          
+              
+         
+              
+            </ul>
+          </nav>
+        </div>
+        
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- /.content --> 
+    {% endblock %}

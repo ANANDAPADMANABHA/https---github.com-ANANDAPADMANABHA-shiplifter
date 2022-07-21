@@ -1,0 +1,181 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<main>
+   
+
+    <!-- coupon-area-start -->
+    <section class="coupon-area pt-120 pb-30">
+        <div class="container">
+            
+    </div>
+    </section>
+    <!-- coupon-area-end -->
+
+    <!-- checkout-area-start -->
+    <section class="checkout-area pb-85">
+        <div class="container">
+            <form action="confirmpayment" method="POST" >
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="checkbox-form">
+                            
+                            
+                            <div class="different-address">
+                                <h3>Billing Details</h3> 
+                                {% for x in details %}
+                                <div class="radio">
+                                    <label>
+                                    <input type="radio" name="address" id="optionsRadios1" value="{{x.id}}" checked>
+                                        {{x.firstname}} 
+                                        {{x.lastname}} <br>
+                                        {{x.phonenumber}},<br>
+                                        {{x.housename}},<br>
+                                        {{x.town}},<br>
+                                        {{x.city}},<br>
+                                        {{x.pincode}} <br><br>
+                                            
+                                        </label>
+                                    </div>
+                                    {% endfor %}
+                                <div class="ship-different-title">
+                                    <h3>
+                                        
+                                        <div class="order-button-payment mt-20">
+                                            <a href="{% url 'addaddress1' %}" class="tp-btn-h1">Add address</a>
+                                            </div>
+                                    </h3>
+                                </div>
+                                
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="your-order mb-30 ">
+                            <h3>Your order</h3>
+                            <div class="your-order-table table-responsive">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th class="product-name">Product</th>
+                                            <th class="product-total">Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for cart_item in cart_items %}
+                                        <tr class="cart_item">
+                                            <td class="product-name">
+                                                {{cart_item.product.name}} <strong class="product-quantity"> × {{cart_item.quantity}}</strong>
+                                            </td>
+                                            <td class="product-total">
+                                                <span class="amount">${{cart_item.product.price}}</span>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                        
+                                    </tbody>
+                                    <tfoot>
+                                        <tr class="cart-subtotal">
+                                            <th>Cart Subtotal</th>
+                                            <td><span class="amount">${{total}}</span></td>
+                                        </tr>
+                                        <tr class="cart-subtotal">
+                                            <th>Tax</th>
+                                            <td><span class="amount">${{tax}}</span></td>
+                                        </tr>
+                                        <tr class="shipping">
+                                            <th>Shipping</th>
+                                            <td>
+                                                <ul>
+                                                    <li>
+                                                        <input type="radio" name="shipping">
+                                                        <label>
+                                                            Flat Rate: <span class="amount">$7.00</span>
+                                                        </label>
+                                                    </li>
+                                                    <li>
+                                                        <input type="radio" name="shipping">
+                                                        <label>Free Shipping:</label>
+                                                    </li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                        <tr class="order-total">
+                                            <th>Order Total</th>
+                                            <td><strong><span class="amount">{{grand_total}}</span></strong>
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+
+                            <div class="payment-method">
+                                <!-- href="{% url 'confirmpayment' %}"  -->
+                                <div class="order-button-payment mt-20">
+                                <button class="tp-btn-h1" type="submit">Place order</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+    <!-- checkout-area-end -->
+
+    <!-- cta-area-start -->
+    <section class="cta-area d-ldark-bg pt-55 pb-10">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 col-md-6">
+                    <div class="cta-item cta-item-d mb-30">
+                        <h5 class="cta-title">Follow Us</h5>
+                        <p>We make consolidating, marketing and tracking your social media website easy.</p>
+                        <div class="cta-social">
+                            <div class="social-icon">
+                                <a href="#" class="facebook"><i class="fab fa-facebook-f"></i></a>
+                                <a href="#" class="twitter"><i class="fab fa-twitter"></i></a>
+                                <a href="#" class="youtube"><i class="fab fa-youtube"></i></a>
+                                <a href="#" class="linkedin"><i class="fab fa-linkedin-in"></i></a>
+                                <a href="#" class="rss"><i class="fas fa-rss"></i></a>
+                                <a href="#" class="dribbble"><i class="fab fa-dribbble"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="cta-item mb-30">
+                        <h5 class="cta-title">Sign Up To Newsletter</h5>
+                        <p>Join 60.000+ subscribers and get a new discount coupon  on every Saturday.</p>
+                        <div class="subscribe__form">
+                            <form action="#">
+                                <input type="email" placeholder="Enter your email here...">
+                                <button>subscribe</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="cta-item mb-30">
+                        <h5 class="cta-title">Download App</h5>
+                        <p>DukaMarket App is now available on App Store & Google Play. Get it now.</p>
+                        <div class="cta-apps">
+                            <div class="apps-store">
+                                <a href="#"><img src="assets/img/brand/app_ios.png" alt=""></a>
+                                <a href="#"><img src="assets/img/brand/app_android.png" alt=""></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+    <!-- cta-area-end -->
+
+</main>
+
+{% endblock %}
