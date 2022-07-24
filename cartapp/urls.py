@@ -15,7 +15,15 @@ urlpatterns = [
     path('addaddress1',views.addaddress1,name='addaddress1') , 
     path('confirmpayment',views.confirmpayment,name='confirmpayment') , 
     path('placecod',views.placecod,name='placecod') , 
+    path('paypal',views.paypal,name='paypal'), 
+    path('payments',views.payments,name='payments'),
+    path('order_complete',views.order_complete,name='order_complete'),
+    path('razorpayhome',views.razorpayhome,name='razorpayhome'),
+ 
+    
 
 
+    # path('success', views.paypal_success, name="success"),  
+ 
 
 ]

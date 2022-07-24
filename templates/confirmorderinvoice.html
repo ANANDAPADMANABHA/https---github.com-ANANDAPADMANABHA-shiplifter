@@ -111,7 +111,7 @@
                                                 <li class="text-muted ms-3 mt-2"><span class="text-black me-4">Tax(15%)</span>${{tax}}</li>
                                               </ul>
                                               <p class="text-black float-start"><span class="text-black me-3"> Total Amount</span><span
-                                                  style="font-size: 25px;">${{grand_total}}</span></p>
+                                                  style="font-size: 25px;" id="grandtotal">${{grand_total}}</span></p>
                                             </div>
                                           </div>
                                           <hr>
@@ -144,16 +144,13 @@
                                 <button type="submit" class="tp-btn-h1"><a href="{% url 'placecod' %}">Cash on delivery</a></button>
                                 </div>
                                 <div class="order-button-payment mt-20">
-                                  <button type="submit" class="tp-btn-h1"><a href="">Razorpay</a></button>
+                                  <button type="submit" class="tp-btn-h1"><a href="{% url 'razorpayhome' %}">Razorpay</a></button>
                                 </div>
-                                <div class="order-button-payment mt-20" id="paypal-button-container"style="text-align: center;">
-                
-                           
-                                  <a href="{% url 'placecod' %}"></a>
-                          
-                                 
+                                <div class="order-button-payment mt-20">
+                                  <button type="submit" class="tp-btn-h1"><a href="{% url 'paypal' %}">paypal</a></button>
                                 </div>
-                              
+                               
+                                
                                 
                                 
                             </div>
@@ -216,96 +213,8 @@
     <!-- cta-area-end -->
 
 </main>
-<script>
-  function getCookie(name) {
-  let cookieValue = null;
-  if (document.cookie && document.cookie !== '') {
-  const cookies = document.cookie.split(';');
-  for (let i = 0; i < cookies.length; i++) {
-    const cookie = cookies[i].trim();
-    // Does this cookie string begin with the name we want?
-    if (cookie.substring(0, name.length + 1) === (name + '=')) {
-        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-        break;
-    }
-  }
-  }
-  return cookieValue;
-  }
-  
-  var csrftoken = getCookie('csrftoken');
-  var total = '{{ total }}'
-  var url = "{% url 'placecod' %}"
-  var orderID = '{{order_data.order_number}}'       
-  var payment_method= 'Paypal'
-  
-  
-  
- 
-  
-  paypal.Buttons({
-    style: {
-      shape: 'rect',
-      color: 'gold',
-      layout: 'vertical',
-      label: 'paypal',
-      height :50
-    },
-  // Sets up the transaction when a payment button is clicked
-  createOrder: (data, actions) => {
-    debugger
-  return actions.order.create({
-  purchase_units: [{
-    amount: {
-      value: total   
-    }
-  }]
-  
-  });
-  },
-  
-  // Finalize the transaction after payer approval
-  onApprove: (data, actions) => {
-  return actions.order.capture().then(function(orderData) {
-  
-  console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
-  
-  const transaction = orderData.purchase_units[0].payments.captures[0];
-  
-  // completeOrder()
-  sendData();              
-  function sendData(){
-    
-  //send payment details to backend
-                              fetch(url, {
-                                method: 'POST',       
-                                headers: {
-                                  'Content-Type': 'application/json',
-                                  'X-CSRFToken':csrftoken
-                                },
-                                body: JSON.stringify({
-                                  orderID :orderID,
-                                  transID: orderData.id,
-                                  payment_method:payment_method,
-                                  status:orderData.status,
-                                  total:total,
-                                }),
-                              })
-                              .then(response => response.json())
-                              .then(data => {
-                                console.log('Success:', data);
-                                window.location.href = window.location.origin + '/orders/payment_successfull/'
-                                console.log(window.location)
-                              })
-                              .catch((error) => {
-                                console.error('Error:', error);
-  
-                              }); 
-  
-  }
-  
-  });
-  }
-  }).render('#paypal-button-container');
-  </script>
+
+
+
+
 {% endblock %}
