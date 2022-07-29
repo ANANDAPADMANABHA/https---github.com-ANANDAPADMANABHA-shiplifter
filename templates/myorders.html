@@ -21,7 +21,7 @@
               </tr>
             </thead>
             <tbody>
-            {% for x in order %}
+            {% for x in orders %}
               <tr>
                 
                 <td>{{x.address.firstname}}</td>
@@ -29,12 +29,9 @@
                 <td>{{x.ordertotal}}</td>
                 <td>{{x.orderid}}</td>
                 <td>{{x.date}}</td>
-                
-                
-
                 <td>{{x.status}}</td>
                 {% if x.status == 'Cancelled' %}
-                <td> <a href="" class="btn btn-primary">cancelled</a> </td>
+                <td> <a href="" class="btn btn-danger"  >cancelled</a> </td>
                 {% else %}
                 <td> <a href="{% url 'ordercancel' x.id %}" class="btn btn-primary">cancel</a> </td>
                 {% endif %}
@@ -44,6 +41,19 @@
              
             </tbody>
           </table>
+          <nav aria-label="Page navigation example">
+            <ul class="pagination">
+            {% if orders.has_previous %}
+            
+            <li class="page-item"><a class="page-link" href="?page={{ orders.previous_page_number }}">Previous</a></li>
+            
+            {% endif %}
+            <li class="page-item"><a class="page-link" href="#">Page {{orders.number}} of {{orders.paginator.num_pages}}</a></li>
+            
+            {% if orders.has_next %}
+            <li class="page-item"><a class="page-link" href="?page={{orders.next_page_number}}">Next</a></li>
+            {% endif %}
+        </div>
         </div>
     </div>
 </div>

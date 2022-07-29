@@ -16,11 +16,13 @@
             <th scope="col">ordered_date</th>
             <th scope="col">Order_status</th>
             <th scope="col">View_order</th>
+            <th scope="col">View_order</th>
+
             
           </tr>
         </thead>
         <tbody>
-        {% for x in order %}
+        {% for x in orders %}
           <tr>
             
             <td>{{x.address.firstname}}</td>
@@ -28,21 +30,47 @@
             <td>{{x.ordertotal}}</td>
             <td>{{x.orderid}}</td>
             <td>{{x.date}}</td>
-            
+            <td>{{x.status}}</td>
             
 
-            <td>{{x.status}}</td>
-            {% if x.status == 'Cancelled' %}
-            <td> <a href="" class="btn btn-primary">cancelled</a> </td>
-            {% else %}
-            <td> <a href="{% url 'ordercanceladmin' x.id %}" class="btn btn-primary">cancel</a> </td>
-            {% endif %}
+            
+            <td>
+              <form action="{% url 'orderstatus' x.id %}" method="POST">
+                {% csrf_token %}
+            
+
+                <select  class="form-control" name ='status' >
+                  <option>Confirmed</option>
+                  <option>Shipped</option>
+                  <option>Out_for_delivery</option>
+                  <option>Delivered</option>
+                  <option>Cancelled</option>
+                  <option>Returned</option>
+
+                </select>
+               
+            </td>
+            <td><button type="submit" class="btn btn-primary">submit</button></td>
+          </form>
+          
             
           </tr>
           {% endfor %}
          
         </tbody>
       </table>
+      <nav aria-label="Page navigation example">
+        <ul class="pagination">
+        {% if orders.has_previous %}
+        
+        <li class="page-item"><a class="page-link" href="?page={{ orders.previous_page_number }}">Previous</a></li>
+        
+        {% endif %}
+        <li class="page-item"><a class="page-link" href="#">Page {{orders.number}} of {{orders.paginator.num_pages}}</a></li>
+        
+        {% if orders.has_next %}
+        <li class="page-item"><a class="page-link" href="?page={{orders.next_page_number}}">Next</a></li>
+        {% endif %}
     </div>
 </div>
 </div>

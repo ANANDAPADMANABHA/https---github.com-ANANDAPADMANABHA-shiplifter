@@ -31,17 +31,17 @@
                             <ul class="nav nav-tabs flex-sm-column justify-content-between" id="productThumbTab" role="tablist">
                                 <li class="nav-item" role="presentation">
                                   <button class="nav-link active" id="thumbOne-tab" data-bs-toggle="tab" data-bs-target="#thumbOne" type="button" role="tab" aria-controls="thumbOne" aria-selected="true">
-                                      <img src="" alt="">
+                                      <img src="{{thisProduct.image}}" alt="" style="height: 2rem ;">
                                   </button>
                                 </li>
-                                <li class="nav-item" role="presentation">
-                                  <button class="nav-link" id="thumbTwo-tab" data-bs-toggle="tab" data-bs-target="#thumbTwo" type="button" role="tab" aria-controls="thumbTwo" aria-selected="false">
-                                    <img src="assets/img/product/nav/product-nav-2.jpg" alt="">
+                                <li  class="nav-item" role="presentation">
+                                  <button  class="nav-link" id="thumbTwo-tab" data-bs-toggle="tab" data-bs-target="#thumbTwo" type="button" role="tab" aria-controls="thumbTwo" aria-selected="false" >
+                                    <img src="{{thisProduct.image1}}" alt="" style="height: 2rem ;" >
                                   </button>
                                 </li>
                                 <li class="nav-item" role="presentation">
                                   <button class="nav-link" id="thumbThree-tab" data-bs-toggle="tab" data-bs-target="#thumbThree" type="button" role="tab" aria-controls="thumbThree" aria-selected="false">
-                                    <img src="assets/img/product/nav/product-nav-3.jpg" alt="">
+                                    <img src="{{thisProduct.image2}}" alt="" style="height: 2rem ;">
                                   </button>
                                 </li>
                             </ul>
@@ -54,12 +54,12 @@
                                     </div>
                                     <div class="tab-pane fade" id="thumbTwo" role="tabpanel" aria-labelledby="thumbTwo-tab">
                                         <div class="product__details-nav-thumb w-img">
-                                            <img src="assets/img/product/nav/product-nav-big-3.jpg" alt="">
+                                            <img src="{{thisProduct.image}}" alt="">
                                         </div>
                                     </div>
                                     <div class="tab-pane fade" id="thumbThree" role="tabpanel" aria-labelledby="thumbThree-tab">
                                         <div class="product__details-nav-thumb w-img">
-                                            <img src="assets/img/product/nav/product-nav-big-2.jpg" alt="">
+                                            <img src="{{thisProduct.image}}" alt="">
                                         </div>
                                     </div>
                                   </div>
@@ -81,7 +81,8 @@
                                 <span><a href="#">Add your review</a></span>
                             </div>
                             <div class="price mb-10">
-                                <span>${{thisProduct.price}}</span>
+                                <del>${{thisProduct.price}}</del>
+                                <span>${{thisProduct.offer_price}}</span>
                             </div>
                             <div class="features-des mb-20 mt-10">
                                 <ul>
@@ -92,12 +93,10 @@
                                 </ul>
                             </div>
                             <div class="product-stock mb-20">
-                                <h5>Availability: <span> 940 in stock</span></h5>
+                                <h5>Availability: <span> {{thisProduct.stock}}</span></h5>
                             </div>
                             <div class="cart-option mb-15">
-                                <div class="product-quantity mr-20">
-                                    <div class="cart-plus-minus p-relative"><input type="text" value="1"><div class="dec qtybutton">-</div><div class="inc qtybutton">+</div></div>
-                                </div>
+                               
                                 <a href="{% url 'add_cart' thisProduct.id %}" class="cart-btn">Add to Cart</a> 
                                 
                             </div>

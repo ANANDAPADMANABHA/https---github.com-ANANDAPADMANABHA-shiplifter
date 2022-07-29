@@ -10,11 +10,26 @@ urlpatterns = [
     path('otpenter',views.otpverify),
     path('singnupuser',views.userSignup),
     path('userlogout',views.userlogout,name='userlogout'),
-    path('productdisplay<int:id>',views.productDisplay) ,
+    path('productdisplay<int:id>',views.productDisplay,name='productdisplay') ,
     path('userprofile',views.userprofile,name='userprofile'), 
     path('myorders',views.myorders,name='myorders'), 
     path('ordercancel/<int:id>/',views.ordercancel,name='ordercancel') ,
     path('changepassword',views.changepassword,name='changepassword'),  
+    path('search',views.search,name='search'),  
+    path('homecart',views.homecart,name='homecart'),  
+    path('shoplaptop',views.shoplaptop,name='shoplaptop'),  
+    path('shopphone',views.shopphone,name='shopphone'), 
+    path('shopheadphone',views.shopheadphone,name='shopheadphone'), 
+    path('shoptab',views.shoptab,name='shoptab'), 
+    path('limiteddeal',views.limiteddeal,name='limiteddeal'),  
+
+ 
+
+
+
+
+    
+    
 
 
 

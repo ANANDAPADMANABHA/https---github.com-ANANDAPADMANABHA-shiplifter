@@ -12,8 +12,9 @@
       <link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.png">
       <!-- CSS here -->
 
+      <link type="text/css" href="@@path/vendor/sweetalert2/dist/sweetalert2.min.css" rel="stylesheet">
 
-     
+      <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
       <script src="https://www.paypal.com/sdk/js?client-id=Ae8aPnJ7t8-1WPEXQRXqxs4vmhlSbBogBTPYtA5CPoQ27T6J3S2BZ4PP1GM_Uoy017KM0A4FYB7QhEoP&currency=USD"></script>
       <link rel="stylesheet" href="{% static 'assets/css/preloader.css' %}">
       <link rel="stylesheet" href="{% static 'assets/css/bootstrap.css' %}">
@@ -190,7 +191,7 @@
                         <div class="col-xl-3 col-lg-3 col-md-4 col-sm-4">
                             <div class="header__info header__info-2">
                                 <div class="logo logo-3">
-                                    <a href="index.html" class="logo-image"><img src="assets/img/logo/logo1.svg" alt="logo"></a>
+                                    <a href="{% url 'userhome' %}" class="logo-image"><img src="{% static 'assets\img\Untitled-1.png' %}" alt="logo"></a>
                                 </div>
                                 <div class="side-menu mr-20">
                                     <button type="button" class="side-menu-btn offcanvas-toggle-btn"><i class="fas fa-bars"></i></button>
@@ -199,27 +200,12 @@
                         </div>
                         <div class="col-xl-5 col-lg-4 d-none d-lg-block">
                             <div class="header__search">
-                                <form action="#">
+                                <form action="{% url 'search' %}">
                                     <div class="header__search-box">
-                                        <input class="search-input search-input-2" type="text" placeholder="I'm shopping for...">
+                                        <input name="search" class="search-input search-input-2" type="text" placeholder="I'm shopping for...">
                                         <button class="button button-2 button-3" type="submit"><i class="far fa-search"></i></button>
                                     </div>
-                                    <div class="header__search-cat">
-                                        <select>
-                                            <option>All Categories</option>
-                                            <option>Best Seller Products</option>
-                                            <option>Top 10 Offers</option>
-                                            <option>New Arrivals</option>
-                                            <option>Phones &amp; Tablets</option>
-                                            <option>Electronics &amp; Digital</option>
-                                            <option>Fashion &amp; Clothings</option>
-                                            <option>Jewelry &amp; Watches</option>
-                                            <option>Health &amp; Beauty</option>
-                                            <option>Sound &amp; Speakers</option>
-                                            <option>TV &amp; Audio</option>
-                                            <option>Computers</option>
-                                        </select>
-                                    </div>
+                                   
                                 </form>
                             </div>
                         </div>
@@ -325,51 +311,35 @@
             <div class="container">
                 <div class="box-items-inner pt-10 pb-10">
                     <div class="box-item">
-                        <a href="shop.html">
+                        <a href="{% url 'shoplaptop' %}">
                             <i class="fal fa-desktop"></i>
-                        Laptop <br> & Computer
+                        Laptop 
                         </a>
                     </div>
                     <div class="box-item">
-                        <a href="shop.html">
+                        <a href="{% url 'shopphone' %}">
                             <i class="fal fa-mobile"></i>
-                        Tablets <br> & Mobile Phones
+                          Mobile Phones
                         </a>
                     </div>
                     <div class="box-item">
-                        <a href="shop.html">
+                        <a href="{% url 'shoptab' %}">
                             <i class="fal fa-router"></i>
-                        Digitals <br> & Electronics
+                        Tablets
                         </a>
                     </div>
-                    <div class="box-item">
-                        <a href="shop.html">
-                            <i class="fal fa-webcam"></i>
-                        Camera <br> & Accesories
-                        </a>
-                    </div>
-                    <div class="box-item">
-                        <a href="shop.html">
-                            <i class="fal fa-bed-alt"></i>
-                        Decor <br> & Furniture
-                        </a>
-                    </div>
-                    <div class="box-item">
-                        <a href="shop.html">
-                            <i class="fal fa-tshirt"></i>
-                        Fashion <br> & Clotheing
-                        </a>
-                    </div>
-                    <div class="box-item d-lg-none">
-                        <a href="shop.html">
-                            <i class="fal fa-hat-chef"></i>
-                        Garden <br> & Home Kitchen
-                        </a>
-                    </div>
+                    
                     <div class="box-item d-lg-none d-xl-block">
-                        <a href="shop.html">
+                        <a href="{% url 'shopheadphone' %}">
                             <i class="fal fa-speaker"></i>
                         Audio <br> & Headphones
+                        </a>
+                    </div>
+
+                    <div class="box-item d-lg-none d-xl-block">
+                        <a href="{% url 'limiteddeal' %}">
+                            <i class="fal fa-speaker"></i>
+                        Limited Deal
                         </a>
                     </div>
                 </div>
@@ -387,22 +357,12 @@
                     
                 </li>
                 <li><a href="about.html">About Us</a></li>
-                <li><a href="shop.html">Shop <i class="far fa-angle-down"></i></a>
-                    <ul class="submenu">
-                        <li><a href="shop.html">shop</a></li>
-                        <li><a href="shop-details.html">Shop Details</a></li>
-                    </ul>
-                </li>
-                <li><a href="blog.html">Blog <i class="far fa-angle-down"></i></a>
-                    <ul class="submenu">
-                        <li><a href="blog.html">Blog</a></li>
-                        <li><a href="blog-details.html">Blog Details</a></li>
-                    </ul>
-                </li>
+               
                 <li>
                     {% if user.is_authenticated %}
                     <a href="{% url 'userprofile' %}">my account <i class="far fa-angle-down"></i></a>
                    {% else %}
+
                    {% endif %}
                 </li>
             </ul>
@@ -419,12 +379,12 @@
         </div>
         <div class="offcanvas__content">
             <div class="offcanvas__logo mb-40">
-                <a href="index.html">
-                <img src="assets/img/logo/logo-white.png" alt="logo">
+                <a href="{% url 'userhome' %}">
+                <img src="{% static 'assets\img\Untitled-1.png' %}" alt="logo" style="height:3rem ;">
                 </a>
             </div>
             <div class="offcanvas__search mb-25">
-                <form action="#">
+                <form action="{% url 'search' %}">
                     <input type="text" placeholder="What are you searching for?">
                     <button type="submit" ><i class="far fa-search"></i></button>
                 </form>
@@ -486,6 +446,86 @@
     <!-- offcanvas area end -->
 
     {% block content %}
+
+{% for x in data %}
+<section class="top-dels light-bg-s pt-30">
+    <div class="container">
+<div class="row row-cols-xxl-5 row-cols-xl-3 row-cols-lg-3 row-cols-md-2 row-cols-sm-2 row-cols-1">
+
+    
+    <div class="col">
+        <div class="product__item product__item-2 b-radius-2 mb-20">
+            <div class="product__thumb fix">
+                <div class="product-image w-img">
+                    <a href="productdisplay{{x.id}}">
+                        <img src="{{x.image}}" alt="product" style="width: 180px;height: 160px;">
+                    </a>
+                </div>
+                <div class="product__offer">
+                    {% if x.category.offer %}
+                <span class="discount">-{{x.category.offer}}</span>
+          >
+                {% endif %}
+
+                </div>
+                <div class="product-action product-action-2">
+                    <a href="#" class="icon-box icon-box-1" data-bs-toggle="modal" data-bs-target="#productModalId">
+                        <i class="fal fa-eye"></i>
+                        <i class="fal fa-eye"></i>
+                    </a>
+                    <a href="#" class="icon-box icon-box-1">
+                        <i class="fal fa-heart"></i>
+                        <i class="fal fa-heart"></i>
+                    </a>
+                    <a href="#" class="icon-box icon-box-1">
+                        <i class="fal fa-layer-group"></i>
+                        <i class="fal fa-layer-group"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="product__content product__content-3">
+                <h6><a href="productdisplay{{x.id}}">{{x.name}}</a></h6>
+                <div class="rating mb-5 mt-10">
+                    <ul>
+                        <li><a href="#"><i class="fal fa-star"></i></a></li>
+                        <li><a href="#"><i class="fal fa-star"></i></a></li>
+                        <li><a href="#"><i class="fal fa-star"></i></a></li>
+                        <li><a href="#"><i class="fal fa-star"></i></a></li>
+                        <li><a href="#"><i class="fal fa-star"></i></a></li>
+                    </ul>
+                    <span>(01 review)</span>
+                </div>
+                <div class="price mb-20">
+                    
+                    {% if x.offer_price %}
+                    <span>OFFER   {{x.offer_price}} $</span>
+                    {% else %}
+                    <span>{{x.price}} $</span>
+                    {% endif %}
+
+
+                </div>
+                <div class="progress mb-5">
+                    <div class="progress-bar bg-danger" role="progressbar" style="width: 20%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+                <div class="progress-rate">
+                    <span>stock:{{x.stock}}</span>
+                </div>
+            </div>
+            <div class="product__add-cart text-center">
+                <button type="button" class="cart-btn-3 product-modal-sidebar-open-btn d-flex align-items-center justify-content-center w-100">
+                    <a href="add_cart">Add to Cart</a>
+                
+                </button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+    </section>
+   
+{% endfor %}
 
     {% endblock %}
 

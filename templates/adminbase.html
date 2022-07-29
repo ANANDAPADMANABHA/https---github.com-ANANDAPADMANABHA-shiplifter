@@ -50,15 +50,7 @@
         <ul class="nav navbar-nav pull-left">
           <li><a class="sidebar-toggle" data-toggle="push-menu" href=""></a> </li>
         </ul>
-        <div class="pull-left search-box">
-          <form action="#" method="get" class="search-form">
-            <div class="input-group">
-              <input name="search" class="form-control" placeholder="Search..." type="text">
-              <span class="input-group-btn">
-              <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i> </button>
-              </span></div>
-          </form>
-          <!-- search form --> </div>
+        
         <div class="navbar-custom-menu">
           <ul class="nav navbar-nav">
             <!-- Messages: style can be found in dropdown.less-->
@@ -92,9 +84,9 @@
         <!-- sidebar menu: : style can be found in sidebar.less -->
         <ul class="sidebar-menu" data-widget="tree">
           <li class="header">PERSONAL</li>
-          <li><a href="admintable"> <i class="fa fa-group"></i>Users</a></li>
-          <li><a href="productlist"><i class="fa fa-archive"></i>Products</a></li>
-          <li><a href="category"><i class="fa fa-th"></i>Category</a></li>
+          <li><a href="{% url 'admintable' %}"> <i class="fa fa-group"></i>Users</a></li>
+          <li><a href="{% url 'productlist' %}"><i class="fa fa-archive"></i>Products</a></li>
+          <li><a href="{% url 'category' %}"><i class="fa fa-th"></i>Category</a></li>
           <li><a href="{% url 'orderdisplay' %}"><i class="fa fa-th"></i>orders</a></li>
           
               
@@ -125,5 +117,32 @@
 <script src="{% static 'assets/dist/plugins/chartist-js/chartist.min.js' %}"></script> 
 <script src="{% static 'assets/dist/plugins/chartist-js/chartist-plugin-tooltip.js' %}"></script> 
 <script src="{% static 'assets/dist/plugins/functions/chartist-init.js' %}"></script>
+
+
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+<script>
+  function confirmation(e){
+  
+  swal({
+    title: "Are you sure?",
+    text: "Once deleted, you will not be able to recover this imaginary file!",
+    icon: "warning",
+    buttons: true,
+    dangerMode: true,
+  })
+  .then((willDelete) => {
+    if (willDelete) {
+      swal("Poof! Your imaginary file has been deleted!", {
+        icon: "success",
+      });
+    } else {
+      swal("Your imaginary file is safe!");
+    }
+  });
+}
+</script>
+
+
 </body>
 </html>

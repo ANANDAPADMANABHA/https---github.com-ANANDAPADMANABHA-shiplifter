@@ -22,6 +22,5 @@ urlpatterns = [
     path('',include('user.urls')),
     path('admins/',include('myadmin.urls')),
     path('cart/',include('cartapp.urls')),
-    
-    
 ]
+

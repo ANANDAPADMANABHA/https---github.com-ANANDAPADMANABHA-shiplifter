@@ -1,104 +1,6 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>Niche Admin - Powerful Bootstrap 4 Dashboard and Admin Template</title>
-<!-- Tell the browser to be responsive to screen width -->
-<meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1" />
+{% extends 'adminbase.html' %}
 
-<!-- v4.0.0-alpha.6 -->
-<link rel="stylesheet" href="{% static 'assets/dist/bootstrap/css/bootstrap.min.css' %}">
-
-<!-- Google Font -->
-<link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
-
-<!-- Theme style -->
-<link rel="stylesheet" href="{% static 'assets/dist/css/style.css' %}">
-<link rel="stylesheet" href="{% static 'assets/dist/css/font-awesome/css/font-awesome.min.css' %}">
-<link rel="stylesheet" href="{% static 'assets/dist/css/et-line-font/et-line-font.css' %}">
-<link rel="stylesheet" href="{% static 'assets/dist/css/themify-icons/themify-icons.css' %}">
-
-<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-<!--[if lt IE 9]>
-  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-<![endif]-->
-
-</head>
-<body class="skin-blue sidebar-mini">
-  <div class="wrapper boxed-wrapper">
-    <header class="main-header"> 
-      <!-- Logo --> 
-      <a href="index.html" class="logo blue-bg"> 
-      <!-- mini logo for sidebar mini 50x50 pixels --> 
-      <span class="logo-mini"><img src="dist/img/logo-n.png" alt=""></span> 
-      <!-- logo for regular state and mobile devices --> 
-      <span class="logo-lg"><img src="dist/img/logo.png" alt=""></span> </a> 
-      <!-- Header Navbar: style can be found in header.less -->
-      <nav class="navbar blue-bg navbar-static-top"> 
-        <!-- Sidebar toggle button-->
-        <ul class="nav navbar-nav pull-left">
-          <li><a class="sidebar-toggle" data-toggle="push-menu" href=""></a> </li>
-        </ul>
-        <div class="pull-left search-box">
-          <form action="#" method="get" class="search-form">
-            <div class="input-group">
-              <input name="search" class="form-control" placeholder="Search..." type="text">
-              <span class="input-group-btn">
-              <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i> </button>
-              </span></div>
-          </form>
-          <!-- search form --> </div>
-        <div class="navbar-custom-menu">
-          <ul class="nav navbar-nav">
-            <!-- Messages: style can be found in dropdown.less-->
-            
-            
-            <!-- User Account: style can be found in dropdown.less -->
-            <li class="dropdown user user-menu p-ph-res"> <a href="#" class="dropdown-toggle" data-toggle="dropdown"> <span class="hidden-xs">ananthu</span> </a>
-              <ul class="dropdown-menu">
-                
-                <li><a href="#"><i class="icon-profile-male"></i> My Profile</a></li>
-                
-                <li><a href="signout"><i class="fa fa-power-off"></i> Logout</a></li>
-              </ul>
-            </li>
-          </ul>
-        </div>
-      </nav>
-    </header>
-    <!-- Left side column. contains the logo and sidebar -->
-    <aside class="main-sidebar"> 
-      <!-- sidebar: style can be found in sidebar.less -->
-      <div class="sidebar"> 
-        <!-- Sidebar user panel -->
-        <div class="user-panel">
-          <div class="image text-center"><img src="https://media-exp2.licdn.com/dms/image/C4D03AQFLT4ePmmq-dA/profile-displayphoto-shrink_800_800/0/1653839158504?e=1662595200&v=beta&t=GgjVvjpBNf8H23RtHnxNRA6cRdfD6yf-dyx6sWEkcV0" class="img-circle"> </div>
-          <div class="info">
-            <p>Ananthu</p>
-             <a href="signout"><i class="fa fa-power-off"></i></a> </div>
-        </div>
-        
-        <!-- sidebar menu: : style can be found in sidebar.less -->
-        <ul class="sidebar-menu" data-widget="tree">
-          <li class="header">PERSONAL</li>
-          <li><a href="admintable"> <i class="fa fa-group"></i>Users</a></li>
-          <li><a href="productlist"><i class="fa fa-archive"></i>Products</a></li>
-          <li><a href="category"><i class="fa fa-th"></i>Category</a></li>
-            
-          
-              
-            </ul>
-      
-         
-      <!-- /.sidebar --> 
-    </aside>
-  
-  <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper"> 
+{% block content %}
     <!-- Content Header (Page header) -->
     <div class="content-header sty-one">
       <h1 class="text-whilte">Edit product</h1>
@@ -136,20 +38,18 @@
                 <label for="">Stock</label>
                 <input type="number" class="form-control" id="" placeholder="Stock" name="stock" value="{{this_product.stock}}">
               </div>
-              <!-- <div class="form-group">
-                <label for="">Category</label> -->
-                <!-- <input type="text" class="form-control" id="" placeholder="Category" name="category" value="{{this_product.category}}"> -->
-                <!-- <div class="col-lg-6">
-                  <select class="form-control" name="category">
-                    {% for category in values %}
-                    <option >{{category.category_name}}</option>
-                    {% endfor %}
-                  </select>
-                </div>
-              </div> -->
+              
               <div class="form-group">
                 <label for="">Image</label>
                 <input type="text" class="form-control" id="" placeholder="Image" name="image" value="{{this_product.image}}">
+              </div>
+              <div class="form-group">
+                <label for="">Image</label>
+                <input type="text" class="form-control" id="" placeholder="Image" name="image1" value="{{this_product.image1}}">
+              </div>
+              <div class="form-group">
+                <label for="">Image</label>
+                <input type="text" class="form-control" id="" placeholder="Image" name="image2" value="{{this_product.image2}}">
               </div>
               
               
@@ -164,17 +64,4 @@
     <!-- /.content --> 
   </div>
   <!-- /.content-wrapper -->
-  
-</div>
-<!-- ./wrapper --> 
-
-<!-- jQuery 3 --> 
-<script src="{% static 'assets/dist/js/jquery.min.js' %}"></script> 
-
-<!-- v4.0.0-alpha.6 --> 
-<script src="{% static 'assets/dist/bootstrap/js/bootstrap.min.js' %}"></script> 
-
-<!-- template --> 
-<script src="{% static 'assets/dist/js/niche.js' %}"></script>
-</body>
-</html>
+  {% endblock %}

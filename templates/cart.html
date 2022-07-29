@@ -27,22 +27,52 @@
                                     <tbody>
                                         {% for cart_item in cart_items %}
                                        <tr>
-                                          <td class="product-thumbnail"><a href="shop-details.html"><img src="{{cart_item.product.image}}" alt=""></a></td>
-                                          <td class="product-name"><a href="shop-details.html">{{cart_item.product.name}}</a></td>
+                                          <td class="product-thumbnail"><a href="{% url 'productdisplay' cart_item.product.id %}"><img src="{{cart_item.product.image}}" alt=""></a></td>
+                                          <td class="product-name"><a href="{% url 'productdisplay' cart_item.product.id %}">{{cart_item.product.name}}</a></td>
                                           <td class="product-price"><span class="amount">{{cart_item.product.price}}</span></td>
                                           <td class="product-quantity">
                                             <!--  -->
-                                                <div class="">
+                                                <div class="product-quantity mr-20">
                                                     <a href="{% url 'remove_cart' cart_item.product.id %}">-</a>
                                                     <input type="button" value="{{cart_item.quantity}}">
-                                                    <a href="{% url 'add_cart' cart_item.product.id %}">+</a>
+                                                    <a class="inc qtybutton" href="{% url 'add_cart' cart_item.product.id %}">+</a>
                                                   
                                                 </div>
                                           </td>
                                           <!-- there are two functions for deleting the cart because in my code we dont create cartid for logged in user if he create a cart -->
-                                          <td class="product-subtotal"><span class="amount">{{cart_item.sub_total}}</span></td>
+                                          <td class="product-subtotal"><span class="amount">{{cart_item.product.offer_price}}</span></td>
                                           {% if user.is_authenticated %}
                                           <td class="product-remove"><a href="{% url 'deleteloggedin' cart_item.product.id %}"><i class="fa fa-times"></i></a></td>
+                                        
+                                          <!-- <td> <form action="{% url 'deleteloggedin' cart_item.product.id %}"method="POST">
+                                            {% csrf_token %}
+                                      
+                                            <a   data-bs-toggle="modal" data-bs-target="#delete-{{cart_item.product.id}}">
+                                              <button type="" class="btn btn-danger btn-block mb-4">Delete</button>
+                                      
+                                            </a>
+                                            <div class="modal fade" id="delete-{{cart_item.product.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                              <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                  <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Confirm</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                  </div>
+                                                  <div class="modal-body">
+                                                    
+                                                    <p style="color:#000000 ;">Do you really want to delete {{cart_item.name}}</p>
+                                                  </div>
+                                                  <div class="modal-footr d-flex justify-content-between p-3">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                    
+                                                    <a href="{% url 'deleteloggedin' cart_item.product.id %}"><button  class="btn btn-danger " style="background:dark-red;">Confirm</button></a>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                              <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+                                            </div>
+                                        </form></td> -->
+
                                           {% else %}
                                           <td class="product-remove"><a href="{% url 'delete_cart' cart_item.product.id %}"><i class="fa fa-times"></i></a></td>
                                           {% endif %}
@@ -60,9 +90,7 @@
                                           <button class="tp-btn-h1" name="apply_coupon" type="submit">Apply
                                                 coupon</button>
                                        </div>
-                                       <div class="coupon2">
-                                          <button class="tp-btn-h1" name="update_cart" type="submit">Update cart</button>
-                                       </div>
+                                       
                                     </div>
                               </div>
                            </div>

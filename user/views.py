@@ -1,17 +1,23 @@
+from ast import Try
+from asyncio.windows_events import NULL
+from calendar import c
 from itertools import product
 import random
 import re
+from unicodedata import name
 from django.contrib import messages
 from django.contrib.auth import authenticate,login,logout
+from django.core.paginator import Paginator ,EmptyPage, InvalidPage
 
 from django.shortcuts import redirect, render
 from orders.models import Orders
-from theproducts.models import Product
+from theproducts.models import Categoryies, Product
 from accounts.models import *
 from cartapp.models import *
 from twilio.rest import Client
 from django.contrib import auth
-from cartapp.views import _cart_id, checkout 
+from cartapp.views import _cart_id, checkout
+import user 
 
 
 
@@ -20,10 +26,20 @@ from cartapp.views import _cart_id, checkout
 
 def home(request):
     user = request.user
-
     acc= Account.objects.all()
-    values = Product.objects.all()
-    return render(request,'index.html',{'values':values,'acc':acc})
+    cat = Categoryies.objects.get(category_name = 'limited deal')
+    values1 = Product.objects.filter(category =cat )
+
+    cat1 = Categoryies.objects.get(category_name = 'demand')
+    values2 = Product.objects.filter(category =cat1 )
+
+    cat2 = Categoryies.objects.get(category_name = 'Hot Trending Products')
+    values3 = Product.objects.filter(category =cat2 )
+
+    
+
+
+    return render(request,'index.html',{'values':values1,'acc':acc ,'values2':values2,'values3':values3})
 
 def signin(request):
     return render(request,'signinuser.html')
@@ -115,11 +131,8 @@ def userSignin(request):
             except:
                 pass
                 
-            
             request.session['username']=username
             login(request,user)
-            
-            
             return redirect(home)
 
         else:
@@ -173,7 +186,7 @@ def otpverify(request):
     return render(request,'otplogin.html')
 
 def productDisplay(request,id):
-    acc= Account.objects.all()
+    acc= Account.objects.all().order_by('id')
     thisProduct = Product.objects.get(id = id)
     return render(request,'productDetails.html',{'thisProduct':thisProduct,'acc':acc})
 
@@ -193,10 +206,14 @@ def userprofile(request):
 
 
 def myorders(request):
-    order = Orders.objects.filter(user = request.user ).order_by('id')
-    
+    order = Orders.objects.filter(user = request.user ).order_by('-id')
+    p = Paginator(order,9)
+    page = request.GET.get('page')
+    orders = p.get_page(page)
+
+
     context = {
-       'order':order 
+       'orders':orders 
     }
     return render(request,'myorders.html',context)
 
@@ -235,3 +252,63 @@ def changepassword(request):
                 return redirect('changepassword')
             
     return render(request,'changepassword.html')
+
+def search(request):
+    try:
+        q = request.GET['search']
+
+        data = Product.objects.all()
+        datas = []
+    
+        for i in data :
+            datas.append(i.name)
+
+        print(datas)
+
+        for i in datas:
+           if q.lower() in i.lower():
+               searched = Product.objects.filter(name = i)
+
+        return render(request, 'base.html',{'data':searched})
+    except:
+        return render(request,'noproduct.html')
+
+    
+
+
+    # data = Product.objects.filter(name = q).order_by('id')
+def homecart(request):
+    if request.user.is_authenticate:
+        cart = CartItem.objects.filter(user=request.user)
+
+        return render (request,'base.html' , {'cart':cart})
+    
+def shoplaptop(request):
+    cat = Categoryies.objects.get(category_name='Laptops')
+    value = Product.objects.filter(category = cat)
+
+    return render (request,'shop.html' ,{'values':value})
+    
+def shopphone(request):
+    cat = Categoryies.objects.get(category_name='Smart Phones')
+    value = Product.objects.filter(category = cat)
+
+    return render (request,'shop.html' ,{'values':value})
+
+def shopheadphone(request):
+    cat = Categoryies.objects.get(category_name='Laptops')
+    value = Product.objects.filter(category = cat)
+
+    return render (request,'shop.html' ,{'values':value})
+
+def shoptab(request):
+    cat = Categoryies.objects.get(category_name='Tablets')
+    value = Product.objects.filter(category = cat)
+
+    return render (request,'shop.html' ,{'values':value})
+
+def limiteddeal(request):
+    cat = Categoryies.objects.get(category_name='limited deal')
+    value = Product.objects.filter(category = cat)
+
+    return render (request,'shop.html' ,{'values':value})
