@@ -14,9 +14,12 @@
                 <th scope="col">Phone_number</th>
                 <th scope="col">Total_price</th>
                 <th scope="col">Order_id</th>
-                <th scope="col">ordered_date</th>
-                <th scope="col">Order_status</th>
-                <th scope="col">View_order</th>
+                <th scope="col">Date</th>
+                <th scope="col"></th>
+
+
+                
+                
                 
               </tr>
             </thead>
@@ -24,17 +27,13 @@
             {% for x in orders %}
               <tr>
                 
-                <td>{{x.address.firstname}}</td>
+                <td><a href="{% url 'orderdetails' x.id %}">{{x.address.firstname}}</a></td>
                 <td>{{x.address.phonenumber}}</td>
                 <td>{{x.ordertotal}}</td>
                 <td>{{x.orderid}}</td>
                 <td>{{x.date}}</td>
-                <td>{{x.status}}</td>
-                {% if x.status == 'Cancelled' %}
-                <td> <a href="" class="btn btn-danger"  >cancelled</a> </td>
-                {% else %}
-                <td> <a href="{% url 'ordercancel' x.id %}" class="btn btn-primary">cancel</a> </td>
-                {% endif %}
+                <td> <a href="{% url 'orderdetails' x.id %}" class="btn btn-primary"  >view details</a> </td>
+                
                 
               </tr>
               {% endfor %}

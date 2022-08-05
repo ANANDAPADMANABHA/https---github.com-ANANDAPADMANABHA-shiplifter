@@ -32,7 +32,7 @@ class Orders(models.Model):
     address     =   models.ForeignKey(Address,on_delete=models.CASCADE, null=True)
     ordertotal  =   models.FloatField(max_length=50 ,null=True)
     orderid     =   models.CharField(max_length=100,null=True)
-    date        =   models.DateField(null=True)
+    date        =   models.DateField(null=True,auto_now_add=True)
     payment     =   models.ForeignKey(Payment,on_delete=models.SET_NULL, blank=True, null=True)
     status      =   models.CharField(max_length=30, choices=STATUS, default='Confirmed')
     is_ordered  =   models.BooleanField(default=False)
@@ -41,11 +41,21 @@ class Orders(models.Model):
 
 
 class OrderProduct(models.Model):
+    STATUS = (
+        ('Confirmed','Confirmed'),
+        ('Shipped','Shipped'),
+        ('Out_for_delivery','Out_for_delivery'),
+        ('Delivered','Delivered'),
+        ('Cancelled','Cancelled'),
+        ('Returned','Returned')
+    )
     
     order       =   models.ForeignKey(Orders,on_delete=models.CASCADE, null=True)
     product     =   models.ForeignKey(Product,on_delete=models.CASCADE, null=True)
     quantity    =   models.IntegerField(null=True)
     price       =   models.FloatField(max_length=200,null=True)
+    status      =   models.CharField(max_length=30, choices=STATUS, default='Confirmed')
+
 
     def sub_total(self):
         return self.price * self.quantity

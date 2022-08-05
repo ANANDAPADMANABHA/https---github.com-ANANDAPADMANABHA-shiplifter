@@ -71,7 +71,7 @@
                                                 {{cart_item.product.name}} <strong class="product-quantity"> × {{cart_item.quantity}}</strong>
                                             </td>
                                             <td class="product-total">
-                                                <span class="amount">${{cart_item.product.price}}</span>
+                                                <span class="amount">${{cart_item.cartprice}}</span>
                                             </td>
                                         </tr>
                                         {% endfor %}
@@ -86,23 +86,7 @@
                                             <th>Tax</th>
                                             <td><span class="amount">${{tax}}</span></td>
                                         </tr>
-                                        <tr class="shipping">
-                                            <th>Shipping</th>
-                                            <td>
-                                                <ul>
-                                                    <li>
-                                                        <input type="radio" name="shipping">
-                                                        <label>
-                                                            Flat Rate: <span class="amount">$7.00</span>
-                                                        </label>
-                                                    </li>
-                                                    <li>
-                                                        <input type="radio" name="shipping">
-                                                        <label>Free Shipping:</label>
-                                                    </li>
-                                                </ul>
-                                            </td>
-                                        </tr>
+                                        
                                         <tr class="order-total">
                                             <th>Order Total</th>
                                             <td><strong><span class="amount">{{grand_total}}</span></strong>

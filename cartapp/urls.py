@@ -22,6 +22,7 @@ urlpatterns = [
     path('order_complete',views.order_complete,name='order_complete'),
     path('razorpayhome',views.razorpayhome,name='razorpayhome'),
     path('razorpaysuccess/',views.razorpaysuccess,name='razorpaysuccess'),
+    path('couponapply',views.couponapply,name='couponapply'), 
     
  
      

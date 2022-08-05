@@ -1,6 +1,7 @@
 from ast import Try
 from asyncio.windows_events import NULL
 from calendar import c
+import imp
 from itertools import product
 import random
 import re
@@ -8,9 +9,8 @@ from unicodedata import name
 from django.contrib import messages
 from django.contrib.auth import authenticate,login,logout
 from django.core.paginator import Paginator ,EmptyPage, InvalidPage
-
 from django.shortcuts import redirect, render
-from orders.models import Orders
+from orders.models import OrderProduct, Orders
 from theproducts.models import Categoryies, Product
 from accounts.models import *
 from cartapp.models import *
@@ -18,7 +18,7 @@ from twilio.rest import Client
 from django.contrib import auth
 from cartapp.views import _cart_id, checkout
 import user 
-
+from myadmin.models import *
 
 
 
@@ -36,10 +36,8 @@ def home(request):
     cat2 = Categoryies.objects.get(category_name = 'Hot Trending Products')
     values3 = Product.objects.filter(category =cat2 )
 
-    
-
-
-    return render(request,'index.html',{'values':values1,'acc':acc ,'values2':values2,'values3':values3})
+    banner = Banner.objects.filter(is_selected = True)
+    return render(request,'index.html',{'values':values1,'acc':acc ,'values2':values2,'values3':values3,'banner':banner})
 
 def signin(request):
     return render(request,'signinuser.html')
@@ -66,7 +64,7 @@ def userSignup(request):
             username_pattern = "^[A-Za-z\s]{3,}$"
             username_verify = re.match(username_pattern,username)
 
-            if username == "" and email == "" and password1 == "" and password2 == "":
+            if username == "" or email == "" or password1 == "" or password2 == "":
                 messages.error(request,'Username must not be empty',extra_tags='signupusername')
                 messages.error(request,"Email must not be empty", extra_tags='signupemail')
                 messages.error(request,"password must not be empty", extra_tags='signuppassword')
@@ -220,11 +218,24 @@ def myorders(request):
 
     
 def ordercancel(request,id):
-    user = request.user
-    order = Orders.objects.get(id = id ,user = user)
+    print('hahahahahahahahahahhahahahhahahaha')
+    print(request.user)
+    order = OrderProduct.objects.get(id = id )
+    product = Product.objects.get(id =order.product.id)
+    acc =Account.objects.get(email = request.user )
 
+    if acc.wallet:
+
+        acc.wallet += order.price
+        
+    else:
+        acc.wallet = order.price
+    acc.save()
     order.status = 'Cancelled'
     order.save()
+
+    product.stock +=order.quantity
+    product.save()
 
     return redirect(myorders)
 
@@ -312,3 +323,26 @@ def limiteddeal(request):
     value = Product.objects.filter(category = cat)
 
     return render (request,'shop.html' ,{'values':value})
+
+def orderdetails(request,id):
+    orderprod = OrderProduct.objects.filter(order = id).order_by('-id')
+    
+    return render (request,'orderdetails.html',{'orderprod':orderprod} )
+
+    
+def orderreturn(request,id):
+    
+    order = OrderProduct.objects.get(id = id )
+    product = Product.objects.get(id =order.product.id)
+    acc =Account.objects.get(username = request.user )
+    
+    acc.wallet = order.price
+    acc.save()
+
+    order.status = 'Returned'
+    order.save()
+
+    product.stock +=order.quantity
+    product.save()
+
+    return redirect(myorders)

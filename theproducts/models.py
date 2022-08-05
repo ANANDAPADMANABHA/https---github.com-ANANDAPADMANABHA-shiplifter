@@ -43,4 +43,12 @@ class Product(models.Model):
         else:
             return self.price - self.price *(self.category.offer/100)
             
-        
+    def max_offer(self):
+        if self.offerproduct:
+            if self.category.offer > self.offerproduct:
+                return self.category.offer
+
+            else:
+                return self.offerproduct
+        else:
+            return self.category.offer

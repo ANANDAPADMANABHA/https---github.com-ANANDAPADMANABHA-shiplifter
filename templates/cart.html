@@ -11,7 +11,7 @@
             <div class="container">
                <div class="row">
                   <div class="col-12">
-                        <form action="#">
+                        
                            <div class="table-content table-responsive">
                               <table class="table">
                                     <thead>
@@ -29,7 +29,7 @@
                                        <tr>
                                           <td class="product-thumbnail"><a href="{% url 'productdisplay' cart_item.product.id %}"><img src="{{cart_item.product.image}}" alt=""></a></td>
                                           <td class="product-name"><a href="{% url 'productdisplay' cart_item.product.id %}">{{cart_item.product.name}}</a></td>
-                                          <td class="product-price"><span class="amount">{{cart_item.product.price}}</span></td>
+                                          <td class="product-price"><span class="amount">{{cart_item.product.offer_price}}</span></td>
                                           <td class="product-quantity">
                                             <!--  -->
                                                 <div class="product-quantity mr-20">
@@ -40,7 +40,7 @@
                                                 </div>
                                           </td>
                                           <!-- there are two functions for deleting the cart because in my code we dont create cartid for logged in user if he create a cart -->
-                                          <td class="product-subtotal"><span class="amount">{{cart_item.product.offer_price}}</span></td>
+                                          <td class="product-subtotal"><span class="amount">{{cart_item.cartprice}}</span></td>
                                           {% if user.is_authenticated %}
                                           <td class="product-remove"><a href="{% url 'deleteloggedin' cart_item.product.id %}"><i class="fa fa-times"></i></a></td>
                                         
@@ -82,17 +82,24 @@
                                     </tbody>
                               </table>
                            </div>
+                           <form action="{% url 'couponapply' %}" method="POST">
+                            {% csrf_token %}
                            <div class="row">
                               <div class="col-12">
                                     <div class="coupon-all">
                                        <div class="coupon">
+                                        
                                           <input id="coupon_code" class="input-text" name="coupon_code" value="" placeholder="Coupon code" type="text">
                                           <button class="tp-btn-h1" name="apply_coupon" type="submit">Apply
                                                 coupon</button>
+                                            {% for message in messages  %}
+                                            {{message}}
+                                            {% endfor %}
                                        </div>
                                        
                                     </div>
                               </div>
+                            </form>
                            </div>
                            <div class="row justify-content-end">
                               <div class="col-md-5">
@@ -107,7 +114,7 @@
                                     </div>
                               </div>
                            </div>
-                        </form>
+                      
                   </div>
                </div>
             </div>
@@ -139,10 +146,10 @@
                             <h5 class="cta-title">Sign Up To Newsletter</h5>
                             <p>Join 60.000+ subscribers and get a new discount coupon  on every Saturday.</p>
                             <div class="subscribe__form">
-                                <form action="#">
+                                
                                     <input type="email" placeholder="Enter your email here...">
                                     <button>subscribe</button>
-                                </form>
+                           
                             </div>
                         </div>
                     </div>

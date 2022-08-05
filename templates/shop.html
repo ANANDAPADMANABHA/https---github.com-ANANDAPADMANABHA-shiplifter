@@ -16,17 +16,11 @@
                                     </a>
                                 </div>
                                 <div class="product__offer">
-                                {% if x.offer %}
-                                    {% if x.category.offer > x.offer %}
-                                        <span class="discount">-{{x.category.offer}}% OFFER</span>
-                                    {% else %}
-                                    <span class="discount">-{{x.offer}}% OFFER</span>
-                                    {% endif %}
-                                {% else %}
-                                <span class="discount">-{{x.category.offer}}% OFFER</span>
+                                
+                                <span class="discount">-{{x.max_offer}}% OFFER</span>
 
                           
-                                {% endif %}
+                           
 
                                 </div>
                                 <div class="product-action product-action-2">

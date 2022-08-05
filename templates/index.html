@@ -11,44 +11,20 @@
                     <div class="col-xl-6">
                         <div class="swiper-container slider__active pb-30">
                             <div class="slider-wrapper swiper-wrapper">
-                                <div class="single-slider swiper-slide b-radius-2 slider-height-3 d-flex align-items-center" data-background="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8aGVhZHBob25lc3xlbnwwfHwwfHw%3D&w=1000&q=80">
+                                {% for x in banner %}
+                                <div class="single-slider swiper-slide b-radius-2 slider-height-3 d-flex align-items-center" data-background="{{x.banner}}">
                                     <div class="slider-content slider-content-2">
                                         <div class="slider-top-btn mb-20" data-animation="fadeInLeft" data-delay="1.5s" style="animation-delay: 1.5s;">
                                             <a href="shop.html" class="st-btn b-radius">HOT DEALS</a>
                                         </div>
-                                        <h2 data-animation="fadeInLeft" data-delay="1.7s" class="pt-15 slider-title pb-5">BIG SALE <br> TOP HEADPHONE</h2>
-                                        <p class="pr-20 slider_text" data-animation="fadeInLeft" data-delay="1.9s">Best Sport Edition 2022</p>
+                                        <h2 data-animation="fadeInLeft" data-delay="1.7s" class="pt-15 slider-title pb-5">{{x.title}}</h2>
+                                        <p class="pr-20 slider_text" data-animation="fadeInLeft" data-delay="1.9s">{{x.description}}</p>
                                         <div class="slider-bottom-btn mt-65">
-                                            <a data-animation="fadeInUp" data-delay="1.15s" href="{% url 'shopheadphone' %}" class="st-btn-border b-radius-2">Discover now</a>
+                                            <a data-animation="fadeInUp" data-delay="1.15s" href="{% url 'shopphone' %}" class="st-btn-border b-radius-2">Discover now</a>
                                         </div>
                                     </div>
                                 </div><!-- /single-slider -->
-                                <div class="single-slider swiper-slide b-radius-2 slider-height-3 d-flex align-items-center" data-background="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6Y6x01TDrzDQ7kXhM9fXUMZDtyy_DuyjPn_uVUC1cI5rqO08XfwDgVy1Dkp5s2zhptCk&usqp=CAU">
-                                    <div class="slider-content slider-content-2">
-                                        <div class="slider-top-btn mb-20" data-animation="fadeInLeft" data-delay="1.5s" style="animation-delay: 1.5s;">
-                                            <a href="shop.html" class="st-btn b-radius">HOT DEALS</a>
-                                        </div>
-                                        <h2 data-animation="fadeInLeft" data-delay="1.5s" class="pt-15 slider-title pb-5">GEAR 360<br> WiRELESS LARBUDS</h2>
-                                        <p class="pr-20 slider_text" data-animation="fadeInLeft" data-delay="1.7s">Top Quality Earbuds & Accessories</p>
-                                        <div class="slider-bottom-btn mt-65">
-                                            <a data-animation="fadeInUp" data-delay="1.9s" href="{% url 'limiteddeal' %}" class="st-btn-border b-radius-2">Discover now</a>
-                                        </div>
-                                    </div>
-                                </div><!-- /single-slider -->
-                                <div class="single-slider b-radius-2 swiper-slide slider-height-3 d-flex align-items-center" data-background="https://www.teahub.io/photos/full/99-997224_iphone-xs-gold-wallpaper-still.jpg">
-                                    <div class="slider-content slider-content-2">
-                                        <div class="slider-top-btn mb-20" data-animation="fadeInLeft" data-delay="1.5s" style="animation-delay: 1.5s;">
-                                            <a href="shop.html" class="st-btn b-radius">HOT DEALS</a>
-                                        </div>
-                                        <h2 data-animation="fadeInLeft" data-delay="1.5s" class="pt-15 slider-title pb-5">LIMITED<br> 
-                                        WEEK DEALS</h2>
-                                        <p class="pr-20 slider_text" data-animation="fadeInLeft" data-delay="1.8s">Discount 20% On Products
-                                        </p>
-                                        <div class="slider-bottom-btn mt-65">
-                                            <a data-animation="fadeInUp" data-delay="1.10s" href="{% url 'limiteddeal' %}" class="st-btn-border b-radius-2">Discover now</a>
-                                        </div>
-                                    </div>
-                                </div><!-- /single-slider -->
+                                {% endfor %}
                                 <div class="main-slider-paginations"></div>
                             </div>
                         </div>

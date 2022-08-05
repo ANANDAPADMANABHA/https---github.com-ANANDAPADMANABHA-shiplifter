@@ -12,6 +12,8 @@
 <!-- v4.0.0-alpha.6 -->
 <link rel="stylesheet" href="{% static 'assets/dist/bootstrap/css/bootstrap.min.css' %}">
 
+<link rel="stylesheet" href="{% static 'assets/dist/plugins/datatables/css/dataTables.bootstrap.min.css' %}">
+
 <!-- Google Font -->
 <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
 
@@ -20,6 +22,10 @@
 <link rel="stylesheet" href="{% static 'assets/dist/css/font-awesome/css/font-awesome.min.css' %}">
 <link rel="stylesheet" href="{% static 'assets/dist/css/et-line-font/et-line-font.css' %}">
 <link rel="stylesheet" href="{% static 'assets/dist/css/themify-icons/themify-icons.css' %}">
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+
 
 <!-- Chartist CSS -->
 <link rel="stylesheet" href="{% static 'assets/dist/plugins/chartist-js/chartist.min.css' %}">
@@ -78,16 +84,22 @@
           <div class="image text-center"><img src="https://media-exp2.licdn.com/dms/image/C4D03AQFLT4ePmmq-dA/profile-displayphoto-shrink_800_800/0/1653839158504?e=1662595200&v=beta&t=GgjVvjpBNf8H23RtHnxNRA6cRdfD6yf-dyx6sWEkcV0" class="img-circle"> </div>
           <div class="info">
             <p>Ananthu</p>
-             <a href="signout"><i class="fa fa-power-off"></i></a> </div>
+             <a href="{% url 'signout' %}"><i class="fa fa-power-off"></i></a> </div>
         </div>
         
         <!-- sidebar menu: : style can be found in sidebar.less -->
         <ul class="sidebar-menu" data-widget="tree">
           <li class="header">PERSONAL</li>
+          <li><a href="{% url 'adminhome' %}"><i class="fa fa-th"></i>Dashboard</a></li>
           <li><a href="{% url 'admintable' %}"> <i class="fa fa-group"></i>Users</a></li>
           <li><a href="{% url 'productlist' %}"><i class="fa fa-archive"></i>Products</a></li>
           <li><a href="{% url 'category' %}"><i class="fa fa-th"></i>Category</a></li>
           <li><a href="{% url 'orderdisplay' %}"><i class="fa fa-th"></i>orders</a></li>
+          <li><a href="{% url 'couponlist' %}"><i class="fa fa-th"></i>coupons</a></li>
+          <li><a href="{% url 'salesreport' %}"><i class="fa fa-th"></i>sales report</a></li>
+          <li><a href="{% url 'adminbanner' %}"><i class="fa fa-th"></i>Banners</a></li>
+
+
           
               
             </ul>
@@ -120,6 +132,30 @@
 
 
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+<script src="{% static 'assets/dist/plugins/datatables/jquery.dataTables.min.js' %}"></script> 
+<script src="{% static 'assets/dist/plugins/datatables/dataTables.bootstrap.min.js' %}"></script> 
+<script>
+  $(function () {
+    $('#example1').DataTable()
+    $('#example2').DataTable({
+      'paging'      : true,
+      'lengthChange': false,
+      'searching'   : false,
+      'ordering'    : true,
+      'info'        : true,
+      'autoWidth'   : false
+    })
+  })
+</script>
+
+<script src="{% static 'assets/dist/plugins/table-expo/filesaver.min.js' %}"></script>
+<script src="{% static 'assets/dist/plugins/table-expo/xls.core.min.js' %}"></script>
+<script src="{% static 'assets/dist/plugins/table-expo/tableexport.js' %}"></script>
+<script>
+$("table").tableExport({formats: ["xlsx","xls", "csv", "txt"],    });
+</script>
+
 
 <script>
   function confirmation(e){

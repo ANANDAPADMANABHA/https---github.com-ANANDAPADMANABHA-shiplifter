@@ -1,0 +1,57 @@
+{% extends 'adminbase.html' %}
+
+{% block content %}
+
+<div class="your-order ">
+    <br>
+    <div class="p-2"><a href="{% url 'couponadd' %}" class="btn btn-primary "  >add coupon</a></div>
+   
+    <!-- <div class="p-2"><a href="{% url 'couponadd' %}" class="btn btn-primary "  >add coupon</a></div> -->
+   
+
+    <div class="d-flex justify-content-center" >
+    <div class="table-responsive col-lg-10 ">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            
+            <th scope="col">coupon code</th>
+            <th scope="col">discount</th>
+            <th scope="col">disable</th>
+
+            
+            
+          </tr>
+        </thead>
+        <tbody>
+        {% for x in coupons %}
+          <tr>
+
+            
+            <td>{{x.coupon_code}}</td>
+            
+            <td>{{x.discount}}</td>
+            
+            {% if x.is_active  %}
+            <td> <a href="{% url 'disableorenablecoupon' x.id %}" class="btn btn-danger"  >disable</a> </td>
+             {% else  %}
+            <td> <a href="{% url 'disableorenablecoupon' x.id %}" class="btn btn-primary"  >enable</a> </td>
+
+            {% endif %}
+     
+      
+        
+      </tr>
+            
+          </tr>
+          {% endfor %}
+         
+        </tbody>
+      </table>
+      
+    </div>
+    </div>
+</div>
+</div>
+  
+{% endblock %}

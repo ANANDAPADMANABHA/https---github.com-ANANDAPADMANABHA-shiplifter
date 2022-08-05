@@ -81,7 +81,7 @@
                                                  <tr>
                                                     <td class="product-thumbnail"><a href="shop-details.html"><img src="{{cart_item.product.image}}" alt=""></a></td>
                                                     <td class="product-name"><a href="shop-details.html">{{cart_item.product.name}}</a></td>
-                                                    <td class="product-price"><span class="amount">{{cart_item.product.price}}</span></td>
+                                                    <td class="product-price"><span class="amount">{{cart_item.product.offer_price}}</span></td>
                                                     <td class="product-quantity">
                                                       <!--  -->
                                                           <div class="">
@@ -92,7 +92,7 @@
                                                           </div>
                                                     </td>
                                                     <!-- there are two functions for deleting the cart because in my code we dont create cartid for logged in user if he create a cart -->
-                                                    <td class="product-subtotal"><span class="amount">{{cart_item.sub_total}}</span></td>
+                                                    <td class="product-subtotal"><span class="amount">{{cart_item.cartprice}}</span></td>
                                         
                                                     
                                                  </tr>
