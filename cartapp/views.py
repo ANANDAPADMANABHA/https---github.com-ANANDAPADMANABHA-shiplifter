@@ -163,11 +163,10 @@ def cartview(request,total = 0, quantity = 0, cart_items =None,tax = 0,grand_tot
         try:
             
             
-            cart_items  = CartItem.objects.filter(user = request.user, is_active = True)
+            cart_items  = CartItem.objects.filter(user = request.user, is_active = True).order_by("-id")
             
             for cart_item in cart_items:
-                
-                
+            
                 total += (cart_item.product.offer_price() * cart_item.quantity)
                 quantity += cart_item.quantity
             tax = (2*total)/100
@@ -238,6 +237,11 @@ def remove_cart(request, product_id):
             cart_items.delete()
         return redirect('cartview')
 
+def delete_carts(request, product_id):
+    
+        cart_items = CartItem.objects.get(id =product_id )
+        cart_items.delete()
+        return redirect('cartview')
 
 def delete_cart(request, product_id):
     # if request.method == "POST":

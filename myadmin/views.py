@@ -15,7 +15,7 @@ from theproducts.models import Product , Categoryies
 from django.views.decorators.cache import cache_control
 from django.core.paginator import Paginator ,EmptyPage, InvalidPage,PageNotAnInteger
 from django.db.models.functions import TruncDate
-
+from django.db.models import Sum,Count
 from django.http import HttpResponse, JsonResponse
 
 # Create your views here.
@@ -61,9 +61,82 @@ def adminLogout(request):
 @cache_control(no_cache =True, must_revalidate =True, no_store =True)
 def admin_home(request):
     if 'username' in request.session:
+        orders = Payment.objects.all()
+        order = Payment.objects.filter(payment_method = 'COD')
+        codtotal = 0
+        cod = 0
+        for ord in order:
+            codtotal = codtotal+float(ord.amount_paid)
+            cod+= 1
+
+        raz = 0
+        order = Payment.objects.filter(payment_method = 'Razorpay')   
+        raztotal = 0
+        for ord in order:
+            raztotal = raztotal+float(ord.amount_paid) 
+            raz+= 1
+            
+        order = Payment.objects.filter(payment_method = 'Paypal')   
+        paytotal = 0
+        pay = 0
+        for ord in order:
+            paytotal = paytotal+float(ord.amount_paid) 
+            pay+= 1
+
+        total =  paytotal + raztotal +  codtotal
+        #order derails
+        Confirmed = OrderProduct.objects.filter(status = 'Confirmed').count()
+        Shipped = OrderProduct.objects.filter(status = 'Shipped').count()
+        Out_for_delivery = OrderProduct.objects.filter(status = 'Out_for_delivery').count()
+        Delivered = OrderProduct.objects.filter(status = 'Delivered').count()
+        Cancelled = OrderProduct.objects.filter(status = 'Cancelled').count()
+        Returned = OrderProduct.objects.filter(status = 'Returned').count()
         
 
-        return render(request,'index_admin.html')
+
+        context = {
+            'orders':orders,
+            'codtotal':int(codtotal),
+            'paytotal':int(paytotal),
+            'raztotal':int(raztotal),
+            'total':int(total),
+            'pay':pay,
+            'raz':raz,
+            'cod':cod,
+            'Confirmed':Confirmed,
+            'Shipped':Shipped,
+            'Out_for_delivery':Out_for_delivery,
+            'Delivered':Delivered,
+            'Cancelled':Cancelled,
+            'Returned':Returned,
+
+        }
+        # orderproduct = OrderProduct.objects.filter(product__category_name = 1)
+
+        # codtotal = Payment.objects.filter(payment_method = 'COD').aggregate(Sum('amount_paid')).get('amount__sum')
+        # cod = Payment.objects.filter(payment_method = 'COD').aggregate(Count('id')).get('id__count')
+       
+        # raztotal = Payment.objects.filter(payment_method = 'Razorpay').aggregate(Sum('amount_paid')).get('amount__sum')
+        # raz = Payment.objects.filter(payment_method = 'Razorpay').aggregate(Count('id')).get('id__count')
+
+        # paytotal = Payment.objects.filter(payment_method = 'Paypal').aggregate(Sum('amount_paid')).get('amount__sum')
+        # pay = Payment.objects.filter(payment_method = 'Paypal').aggregate(Count('id')).get('id__count')
+
+        # ordertotal = Payment.objects.all().aggregate(Sum('amount_paid')).get('amount__sum')
+
+        # context = {
+        #     'orders':orders,
+        #     'codtotal':codtotal,
+        #     'paytotal':paytotal,
+        #     'raztotal':raztotal,
+        #     'total':ordertotal,
+        #     'pay':pay,
+        #     'raz':raz,
+        #     'cod':cod
+        # }
+        # print(paytotal)
+
+        return render(request,'index_admin.html',context)
 
     return redirect(adminLogin)
 
@@ -136,40 +209,59 @@ def editproduct(request,id):
 
     this_product = Product.objects.get(id=id)
     values = Categoryies.objects.all()
+    print("###########################################")
 
     if request.method == 'POST':
+        print("###########################################")
 
         product_name = request.POST.get('name')
         product_description = request.POST.get('description')
         product_price = request.POST.get('price')
         product_stock = request.POST.get('stock')
         product_offer = request.POST.get('offer')
-
+        
+        
+       
+        
         # product_category = request.POST.get('category')
         product_image = request.POST.get('image')
         product_image1 = request.POST.get('image1')
         product_image2 = request.POST.get('image2')
 
-        if product_name == "" :
-            messages.error(request,'product name must not be empty',extra_tags='productname')
-        if product_description == "":
-            messages.error(request,'product description must not be empty',extra_tags='productdescription')
-        if product_image2 == "":
-            messages.error(request,'product image must not be empty',extra_tags='product_image2')
-        if product_price == ""  :
-            messages.error(request,'product price must not be empty',extra_tags='product_price')
-        if float(product_price) <1:
-            messages.error(request,'product price must be valid',extra_tags='product_price')
-        if product_stock == "":
-            messages.error(request,'product stock  must not be empty',extra_tags='product_stock')
-        if int(product_stock) <1:
-            messages.error(request,'product stock  must be more ',extra_tags='product_stock')
-        if int(product_offer) >100:
-            messages.error(request,'product offer  must not be greter than 100',extra_tags='offerproduct')
-        if product_image == "":
-            messages.error(request,'product image must not be empty',extra_tags='product_image0')
-        if product_image1 == "":
-            messages.error(request,'product image  must not be empty',extra_tags='product_image1')
+        if product_name == "" or product_description == "" or product_price == "" or product_stock == ""  or product_offer == ""  or product_image == "" or product_image1 == "" or  product_image2 == "":
+            if product_name == "":   
+                messages.error(request,'product name must not be empty',extra_tags='productname')
+            if product_description == "":
+                messages.error(request,'product description must not be empty',extra_tags='productdescription')
+            if product_image2 == "":
+                messages.error(request,'product image must not be empty',extra_tags='product_image2')
+            if product_price == ""  :
+                messages.error(request,'product price must not be empty',extra_tags='product_price')
+            elif float(product_price) <1:
+                messages.error(request,'product price must be valid',extra_tags='product_price')
+            if product_stock == "":
+                messages.error(request,'product stock  must not be empty',extra_tags='product_stock')
+            elif int(product_stock) <1:
+                messages.error(request,'product stock  must be more ',extra_tags='product_stock')
+            if product_offer == ""  :
+                messages.error(request,'product offer  must not be empty',extra_tags='offerproduct')
+            elif int(product_offer) >100:
+                messages.error(request,'product offer  must not be greter than 100',extra_tags='offerproduct')
+            if product_image == "":
+                messages.error(request,'product image must not be empty',extra_tags='product_image0')
+            if product_image1 == "":
+                messages.error(request,'product image  must not be empty',extra_tags='product_image1')
+
+        elif float(product_price) <1 or int(product_stock) <1 or int(product_offer) >100 :
+            if float(product_price) <1:
+                messages.error(request,'product price must be valid',extra_tags='product_price')
+            if int(product_stock) <1:
+                messages.error(request,'product stock  must be more ',extra_tags='product_stock')
+            if int(product_offer) >100:
+                messages.error(request,'product offer  must not be greter than 100',extra_tags='offerproduct')
+        
+
+
         else:
 
             obj = Product.objects.get(id=id)
@@ -210,39 +302,50 @@ def addproduct(request):
         product_price = request.POST.get('price')
         product_stock = request.POST.get('stock')
         categ       = request.POST.get('category')
-        offerproduct =request.POST.get('offer')
+        product_offer =request.POST.get('offer')
 
         product_image = request.POST.get('image')
         product_image1 = request.POST.get('image1')
         product_image2 = request.POST.get('image2')
-        if product_name == "" :
-            messages.error(request,'product name must not be empty',extra_tags='productname')
 
-        if product_description == "":
-            messages.error(request,'product description must not be empty',extra_tags='productdescription')
-        if product_image2 == "":
-            messages.error(request,'product image must not be empty',extra_tags='product_image2')
-        if product_price == ""  :
-            messages.error(request,'product price must not be empty',extra_tags='product_price')
-        if int(product_price) <1:
-            messages.error(request,'product price must be valid',extra_tags='product_price')
-        if product_stock == "":
-            messages.error(request,'product stock  must not be empty',extra_tags='product_stock')
-        if int(product_stock) <1:
-            messages.error(request,'product stock  must be more ',extra_tags='product_stock')
+        if product_name == "" or product_description == "" or product_price == "" or product_stock == ""  or product_offer == ""  or product_image == "" or product_image1 == "" or  product_image2 == "":
+            if product_name == "":   
+                messages.error(request,'product name must not be empty',extra_tags='productname')
+            if product_description == "":
+                messages.error(request,'product description must not be empty',extra_tags='productdescription')
+            if product_image2 == "":
+                messages.error(request,'product image must not be empty',extra_tags='product_image2')
+            if product_price == ""  :
+                messages.error(request,'product price must not be empty',extra_tags='product_price')
+            elif float(product_price) <1:
+                messages.error(request,'product price must be valid',extra_tags='product_price')
+            if product_stock == "":
+                messages.error(request,'product stock  must not be empty',extra_tags='product_stock')
+            elif int(product_stock) <1:
+                messages.error(request,'product stock  must be more ',extra_tags='product_stock')
+            if product_offer == ""  :
+                messages.error(request,'product offer  must not be empty',extra_tags='offerproduct')
+            elif int(product_offer) >100:
+                messages.error(request,'product offer  must not be greter than 100',extra_tags='offerproduct')
+            if product_image == "":
+                messages.error(request,'product image must not be empty',extra_tags='product_image0')
+            if product_image1 == "":
+                messages.error(request,'product image  must not be empty',extra_tags='product_image1')
 
-        if int(offerproduct) >100:
-            messages.error(request,'product offer  must not be greter than 100',extra_tags='offerproduct')
-        if product_image == "":
-            messages.error(request,'product image must not be empty',extra_tags='product_image0')
-        if product_image1 == "":
-            messages.error(request,'product image  must not be empty',extra_tags='product_image1')
+        elif float(product_price) <1 or int(product_stock) <1 or int(product_offer) >100 :
+            if float(product_price) <1:
+                messages.error(request,'product price must be valid',extra_tags='product_price')
+            if int(product_stock) <1:
+                messages.error(request,'product stock  must be more ',extra_tags='product_stock')
+            if int(product_offer) >100:
+                messages.error(request,'product offer  must not be greter than 100',extra_tags='offerproduct')
+        
         
 
 
         else:
             product = Product(name = product_name ,description =product_description,price=product_price,
-            stock= product_stock,image=product_image,image1=product_image1,image2=product_image2 ,offerproduct=offerproduct)
+            stock= product_stock,image=product_image,image1=product_image1,image2=product_image2 ,offerproduct=product_offer)
             product.category  = Categoryies.objects.get(id=categ)
             product.save()
             return redirect(productList)

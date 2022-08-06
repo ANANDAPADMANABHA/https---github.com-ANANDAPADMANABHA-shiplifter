@@ -37,7 +37,18 @@ def home(request):
     values3 = Product.objects.filter(category =cat2 )
 
     banner = Banner.objects.filter(is_selected = True)
-    return render(request,'index.html',{'values':values1,'acc':acc ,'values2':values2,'values3':values3,'banner':banner})
+    cat3 = Categoryies.objects.get(category_name = 'Laptops')
+
+    hot = Product.objects.filter(category =cat2 )[0:4]
+    onsale = Product.objects.filter(category =cat1 )[0:4]
+    laps = Product.objects.filter(category =cat3 )[0:4]
+
+    
+
+
+
+    return render(request,'index.html',{'values':values1,'acc':acc ,'values2':values2,'values3':values3,'banner':banner,'hot':hot,'onsale':onsale,'laps':laps})
+
 
 def signin(request):
     return render(request,'signinuser.html')
@@ -307,7 +318,7 @@ def shopphone(request):
     return render (request,'shop.html' ,{'values':value})
 
 def shopheadphone(request):
-    cat = Categoryies.objects.get(category_name='Laptops')
+    cat = Categoryies.objects.get(category_name='Hot Trending Products')
     value = Product.objects.filter(category = cat)
 
     return render (request,'shop.html' ,{'values':value})
@@ -320,6 +331,12 @@ def shoptab(request):
 
 def limiteddeal(request):
     cat = Categoryies.objects.get(category_name='limited deal')
+    value = Product.objects.filter(category = cat)
+
+    return render (request,'shop.html' ,{'values':value})
+
+def demand(request):
+    cat = Categoryies.objects.get(category_name='demand')
     value = Product.objects.filter(category = cat)
 
     return render (request,'shop.html' ,{'values':value})

@@ -41,8 +41,8 @@
                                           </td>
                                           <!-- there are two functions for deleting the cart because in my code we dont create cartid for logged in user if he create a cart -->
                                           <td class="product-subtotal"><span class="amount">{{cart_item.cartprice}}</span></td>
-                                          {% if user.is_authenticated %}
-                                          <td class="product-remove"><a href="{% url 'deleteloggedin' cart_item.product.id %}"><i class="fa fa-times"></i></a></td>
+                                          
+                                          <td class="product-remove"><a href="{% url 'delete_cart' cart_item.id %}"><i class="fa fa-times"></i></a></td>
                                         
                                           <!-- <td> <form action="{% url 'deleteloggedin' cart_item.product.id %}"method="POST">
                                             {% csrf_token %}
@@ -73,9 +73,7 @@
                                             </div>
                                         </form></td> -->
 
-                                          {% else %}
-                                          <td class="product-remove"><a href="{% url 'delete_cart' cart_item.product.id %}"><i class="fa fa-times"></i></a></td>
-                                          {% endif %}
+                                          
                                           
                                        </tr>
                                        {% endfor %}

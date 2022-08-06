@@ -22,6 +22,9 @@ urlpatterns = [
     path('shopheadphone',views.shopheadphone,name='shopheadphone'), 
     path('shoptab',views.shoptab,name='shoptab'), 
     path('limiteddeal',views.limiteddeal,name='limiteddeal'),  
+    path('demand',views.demand,name='demand'),  
+
+    
     path('orderdetails/<int:id>/',views.orderdetails,name='orderdetails'),
     path('orderreturn/<int:id>/',views.orderreturn,name='orderreturn')  
  
