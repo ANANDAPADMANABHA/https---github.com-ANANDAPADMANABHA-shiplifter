@@ -72,6 +72,97 @@ def add_cart(request , product_id):
 
     return redirect (cartview)
 
+def add_cartplus(request , product_id):
+    total = 0
+    quantity = 0
+    
+    product = Product.objects.get(id=product_id) #get the product
+    
+
+    if request.user.is_authenticated:
+        if 'coupon_code' in request.session:
+            
+            coupon = Coupon.objects.get(coupon_code =request.session['coupon_code'])
+            reduction = coupon.discount 
+
+        else :
+            reduction = 0
+        
+        try:
+            
+            cart_item = CartItem.objects.get(product = product ,user = request.user)
+            cart_item.quantity += 1 
+            cart_item.cartprice += cart_item.product.offer_price() 
+            cart_item.save()
+
+        except CartItem.DoesNotExist:
+            cart_item = CartItem.objects.create(product = product,quantity = 1,user = request.user,cartprice=product.offer_price() )
+            cart_item.save()
+
+        try:
+            cart_items  = CartItem.objects.filter(user = request.user, is_active = True).order_by("-id")
+            
+            for cart_item in cart_items:
+            
+                total += (cart_item.product.offer_price() * cart_item.quantity)
+                quantity += cart_item.quantity
+            tax = (2*total)/100
+            grand_total = total + tax -reduction
+                  
+        except ObjectDoesNotExist:
+            pass #just ignore
+
+        context = {
+        'total':total,
+        'tax':tax,
+        'cart_items':cart_items,
+        'quantity':quantity,
+        'grand_total':grand_total
+        }
+    else:
+        
+        
+        
+        try:
+            cart = Cart.objects.get(cart_id = _cart_id(request)) #get the cart using the cartid present in the session
+        except Cart.DoesNotExist:
+            cart = Cart.objects.create(cart_id = _cart_id(request))
+            cart.save()
+        try:
+            cart_item = CartItem.objects.get(product = product, cart = cart)
+            cart_item.quantity += 1 
+            cart_item.cartprice += cart_item.product.offer_price() 
+            cart_item.save()
+
+        except CartItem.DoesNotExist:
+            cart_item = CartItem.objects.create(product = product,quantity = 1, cart = cart,cartprice=product.offer_price())
+            cart_item.save()
+
+        try:
+            cart        = Cart.objects.get(cart_id = _cart_id(request))
+            cart.save()
+
+            cart_items  = CartItem.objects.filter(cart = cart, is_active = True).order_by("-id")
+            for cart_item in cart_items:
+                total += (cart_item.product.offer_price() * cart_item.quantity)
+                quantity += cart_item.quantity
+            tax = (2*total)/100
+            grand_total = total + tax 
+            
+        except ObjectDoesNotExist:
+            pass #just ignore
+
+        context = {
+        'total':total,
+        'tax':tax,
+        'cart_items':cart_items,
+        'quantity':quantity,
+        'grand_total':grand_total
+        
+        }
+
+    return render (request,'htmx_cart.html',context)
+
 #to add times to the cart without entering the cart from the index page
 def add_cartsimple(request , product_id):
     
@@ -191,7 +282,7 @@ def cartview(request,total = 0, quantity = 0, cart_items =None,tax = 0,grand_tot
             cart        = Cart.objects.get(cart_id = _cart_id(request))
             cart.save()
 
-            cart_items  = CartItem.objects.filter(cart = cart, is_active = True)
+            cart_items  = CartItem.objects.filter(cart = cart, is_active = True).order_by("-id")
             for cart_item in cart_items:
                 total += (cart_item.product.offer_price() * cart_item.quantity)
                 quantity += cart_item.quantity
@@ -210,6 +301,100 @@ def cartview(request,total = 0, quantity = 0, cart_items =None,tax = 0,grand_tot
     
     
     return render (request,'cart.html' ,context)
+
+def remove_cartminus(request, product_id):
+
+    total = 0
+    quantity = 0
+    cart_items =None
+    tax = 0
+    grand_total =0
+    if request.user.is_authenticated:
+        product = get_object_or_404(Product,id = product_id)
+        cart_items = CartItem.objects.get(user =request.user, product= product)
+
+        if cart_items.quantity > 1 :
+            cart_items.quantity -= 1
+            cart_items.cartprice -= cart_items.product.offer_price() 
+            cart_items.save()
+
+        else:
+            cart_items.delete() 
+        
+    else:
+
+        cart = Cart.objects.get(cart_id = _cart_id(request))
+        product = get_object_or_404(Product,id = product_id)
+        cart_items = CartItem.objects.get(product= product, cart = cart)
+
+        if cart_items.quantity > 1 :
+            cart_items.quantity -= 1
+            cart_items.cartprice -= cart_items.product.offer_price() 
+            cart_items.save()
+
+        else:
+            cart_items.delete()
+
+    if request.user.is_authenticated:
+
+        if 'coupon_code' in request.session:
+            
+            coupon = Coupon.objects.get(coupon_code =request.session['coupon_code'])
+            reduction = coupon.discount 
+
+        else :
+            reduction = 0
+
+        
+        try:
+            
+            
+            cart_items  = CartItem.objects.filter(user = request.user, is_active = True).order_by("-id")
+            
+            for cart_item in cart_items:
+            
+                total += (cart_item.product.offer_price() * cart_item.quantity)
+                quantity += cart_item.quantity
+            tax = (2*total)/100
+            grand_total = total + tax -reduction
+            if grand_total <0:
+                grand_total = tax
+        except ObjectDoesNotExist:
+            pass #just ignore
+
+        context = {
+        'total':total,
+        'quantity':quantity,
+        'cart_items':cart_items,
+        'tax':tax,
+        'grand_total':grand_total,
+        }
+
+    else:
+        try:
+            cart        = Cart.objects.get(cart_id = _cart_id(request))
+            cart.save()
+
+            cart_items  = CartItem.objects.filter(cart = cart, is_active = True).order_by("-id")
+            for cart_item in cart_items:
+                total += (cart_item.product.offer_price() * cart_item.quantity)
+                quantity += cart_item.quantity
+            tax = (2*total)/100
+            grand_total = total + tax
+        except ObjectDoesNotExist:
+            pass #just ignore
+
+        context = {
+        'total':total,
+        'quantity':quantity,
+        'cart_items':cart_items,
+        'tax':tax,
+        'grand_total':grand_total,
+        }
+
+    return render (request,'htmx_cart.html',context)
+    
+    
 
 def remove_cart(request, product_id):
     if request.user.is_authenticated:
@@ -239,11 +424,119 @@ def remove_cart(request, product_id):
             cart_items.delete()
         return redirect('cartview')
 
-def delete_carts(request, product_id):
+def delete_cartshome(request, product_id):
+    total = 0
+    quantity = 0
+    cart_items = CartItem.objects.get(id =product_id )
+    cart_items.delete()
+    if request.user.is_authenticated:
+        if 'coupon_code' in request.session:
+            
+            coupon = Coupon.objects.get(coupon_code =request.session['coupon_code'])
+            reduction = coupon.discount 
+
+        else :
+            reduction = 0
+
+        try:    
+            try:
+                counts = CartItem.objects.filter(user = request.user, is_active = True).count()
+            except:
+                counts = 0
+            
+            cart_items  = CartItem.objects.filter(user = request.user, is_active = True).order_by("-id")[0:2]
+            
+            for cart_item in cart_items:
+                total += (cart_item.product.offer_price() * cart_item.quantity)
+                quantity += cart_item.quantity
+            tax = (2*total)/100
+            grand_total = total + tax -reduction
+            if grand_total <0:
+                grand_total = tax
+        except ObjectDoesNotExist:
+            pass #just ignore
     
-        cart_items = CartItem.objects.get(id =product_id )
-        cart_items.delete()
-        return redirect('cartview')
+    else:
+        try:
+            cart        = Cart.objects.get(cart_id = _cart_id(request))
+            try:
+                counts  = CartItem.objects.filter(cart = cart, is_active = True).count()
+            except:
+                counts = 0
+
+            cart_items  = CartItem.objects.filter(cart = cart, is_active = True)
+            for cart_item in cart_items:
+                total += (cart_item.product.offer_price() * cart_item.quantity)
+                quantity += cart_item.quantity
+            tax = (2*total)/100
+            grand_total = total + tax
+        except ObjectDoesNotExist:
+            counts = 0
+            pass #just ignore
+
+    context = {
+        
+        'quantity':quantity,
+        'cart_items':cart_items,
+        'x':counts,
+        'grand_total':grand_total,
+        }
+    return render (request, "htmx_deletehome.html",context)
+
+
+def delete_carts(request, product_id):
+    total = 0
+    quantity = 0
+    
+    
+    cart_items = CartItem.objects.get(id =product_id )
+    cart_items.delete()
+
+    if request.user.is_authenticated:
+        try:
+            cart_items  = CartItem.objects.filter(user = request.user, is_active = True).order_by("-id")
+            
+            for cart_item in cart_items:
+            
+                total += (cart_item.product.offer_price() * cart_item.quantity)
+                quantity += cart_item.quantity
+            tax = (2*total)/100
+            grand_total = total + tax
+                  
+        except ObjectDoesNotExist:
+            pass #just ignore
+
+        context = {
+        'total':total,
+        'cart_items':cart_items,
+        'quantity':quantity,
+        'tax':tax,
+        
+        }
+
+    else:
+        try:
+            cart        = Cart.objects.get(cart_id = _cart_id(request))
+            cart.save()
+
+            cart_items  = CartItem.objects.filter(cart = cart, is_active = True)
+            for cart_item in cart_items:
+                total += (cart_item.product.offer_price() * cart_item.quantity)
+                quantity += cart_item.quantity
+            tax = (2*total)/100
+            grand_total = total + tax
+            
+        except ObjectDoesNotExist:
+            pass #just ignore
+
+        context = {
+        'total':total,
+       'tax':tax,
+        'cart_items':cart_items,
+        'quantity':quantity,
+        
+        }
+    return render (request,'htmx_cart.html',context)
 
 def delete_cart(request, product_id):
     # if request.method == "POST":

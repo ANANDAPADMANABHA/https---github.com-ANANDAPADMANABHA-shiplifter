@@ -7,10 +7,16 @@ urlpatterns = [
 
     path('',views.cartview, name='cartview'),  
     path('add_cart/<int:product_id>/',views.add_cart, name='add_cart'),
+    path('add_cartplus/<int:product_id>/',views.add_cartplus, name='add_cartplus'),
+
+    
     path('add_cartsimple/<int:product_id>/',views.add_cartsimple, name='add_cartsimple'), 
+    path('remove_cartminus/<int:product_id>/',views.remove_cartminus,name ='remove_cartminus' ),
 
     path('remove_cart/<int:product_id>/',views.remove_cart,name ='remove_cart' ),
     path('delete/<int:product_id>/',views.delete_carts,name ='delete_cart' ),
+    path('delete_cartshome/<int:product_id>/',views.delete_cartshome,name ='delete_cartshome' ),
+
     path('deleteloggedin/<int:product_id>/',views.delete_cart_loggedin,name ='deleteloggedin' ),
     path('checkout',views.checkout,name='checkout'), 
     path('addaddress',views.addaddress,name='addaddress') , 

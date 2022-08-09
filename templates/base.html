@@ -278,8 +278,10 @@
                             {% endif %}
                             
                                 
-                                <div class="block-cart action">
-                                    <a class="icon-link icon-link-2" href="{% url 'cartview' %}">
+                                <div class="block-cart action" id="cartboxhome">
+                            {% include "htmx_deletehome.html" %}
+
+                                    <!-- <a class="icon-link icon-link-2" href="{% url 'cartview' %}">
                                     <i class="flaticon-shopping-bag"></i>
                                     
                                     <span class="count count-2">{{x}}</span>
@@ -342,7 +344,7 @@
                                                 </li>
                                             </ul>
                                         </div>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
                         </div>
