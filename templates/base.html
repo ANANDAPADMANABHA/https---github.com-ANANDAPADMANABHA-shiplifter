@@ -29,6 +29,32 @@
       <link rel="stylesheet" href="{% static 'assets/css/font-awesome-pro.css' %}">
       <link rel="stylesheet" href="{% static 'assets/css/default.css' %}">
       <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
+      <script src="https://unpkg.com/htmx.org@1.8.0" integrity="sha384-cZuAZ+ZbwkNRnrKi05G/fjBX+azI9DNOkNYysZ0I/X5ZFgsmMiBXgDZof30F5ofc" crossorigin="anonymous"></script>
+
+
+      <style>
+        * {box-sizing: border-box;}
+        
+        .img-zoom-container {
+          position: relative;
+        }
+        
+        .img-zoom-lens {
+          position: absolute;
+          border: 1px solid #d4d4d4;
+          /*set the size of the lens:*/
+          width: 40px;
+          height: 40px;
+        }
+        
+        .img-zoom-result {
+          border: 1px solid #d4d4d4;
+          /*set the size of the result div:*/
+          width: 300px;
+          height: 300px;
+        }
+        </style>
+        
    </head>
    <body>
       <!--[if lte IE 9]>
@@ -228,6 +254,16 @@
                                    
                                     </a>
                                 </div>
+                                <div class="block-wishlist action">
+                                    <a class="icon-link icon-link-2" href="{% url 'userprofile' %}">
+                                        <i class="flaticon-user"></i>
+
+                                    
+                                    <span class="text">
+                                    <span class="sub"></span>
+                                    Profile </span>
+                                    </a>
+                                </div>
                             {% else %}
                             <div class="header-action">
                                 <div class="block-userlink">
@@ -241,15 +277,7 @@
                                 </div>
                             {% endif %}
                             
-                                <div class="block-wishlist action">
-                                    <a class="icon-link icon-link-2" href="wishlist.html">
-                                    <i class="flaticon-heart"></i>
-                                    <span class="count count-2">0</span>
-                                    <span class="text">
-                                    <span class="sub">Favorite</span>
-                                    My Wishlist </span>
-                                    </a>
-                                </div>
+                                
                                 <div class="block-cart action">
                                     <a class="icon-link icon-link-2" href="{% url 'cartview' %}">
                                     <i class="flaticon-shopping-bag"></i>
@@ -339,7 +367,7 @@
                     </div>
                     <div class="box-item">
                         <a href="{% url 'shoptab' %}">
-                            <i class="fal fa-router"></i>
+                            <i class="fal fa-mobile"></i>
                         Tablets
                         </a>
                     </div>
@@ -705,5 +733,12 @@
       <script src="{% static 'assets/js/imagesloaded-pkgd.js' %}"></script>
       <script src="{% static 'assets/js/ajax-form.js' %}"></script>
       <script src="{% static 'assets/js/main.js' %}"></script>
+    
+      <script>
+        document.body.addEventListener('htmx:configRequest', function(event) {
+            event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}'; // add a new parameter into the mix
+        });
+      </script>
+
    </body>
 </html>

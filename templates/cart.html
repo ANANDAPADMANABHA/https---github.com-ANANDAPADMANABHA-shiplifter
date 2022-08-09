@@ -42,7 +42,18 @@
                                           <!-- there are two functions for deleting the cart because in my code we dont create cartid for logged in user if he create a cart -->
                                           <td class="product-subtotal"><span class="amount">{{cart_item.cartprice}}</span></td>
                                           
-                                          <td class="product-remove"><a href="{% url 'delete_cart' cart_item.id %}"><i class="fa fa-times"></i></a></td>
+                                          <td class="product-remove"><a href="{% url 'delete_cart' cart_item.id %}" ><i class="fa fa-times"></i></a></td>
+                                          <td class="product-remove">
+                                            <span 
+                                            style="cursor:pointer"
+                                            hx-delete ="{% url 'delete_cart' cart_item.id %}"
+                                            hx-target = "#film-list"
+                                            hx-confirm = 'are you sure you wish to delete'><i class="fa fa-times"></i></span></td>
+
+                                          <!-- <td class="product-remove"><span 
+                                            hx-delete="{% url 'delete_cart' cart_item.id %}"
+                                            hx-target>x</span></td> -->
+
                                         
                                           <!-- <td> <form action="{% url 'deleteloggedin' cart_item.product.id %}"method="POST">
                                             {% csrf_token %}
@@ -166,8 +177,10 @@
                 </div>
             </div>
 
+           
         </section>
         <!-- cta-area-end -->
 
     </main>
+    
     {% endblock %}

@@ -21,7 +21,9 @@ from django.contrib import auth
 from orders.models import OrderProduct, Orders, Payment
 from datetime import date 
 from user.views import *
+
 from django.views.decorators.cache import cache_control
+# from user.views import 
 
 
 
@@ -334,11 +336,11 @@ def addaddress(request):
         pincode    = request.POST.get('pincode')
 
         address = Address(firstname=firstname,lastname=lastname,housename=housename,locality=locality,city=city,state=state,pincode=pincode,phonenumber=phonenumber,user = request.user)
-        print('11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111')
+        
         address.save()
 
         return redirect(checkout)
-
+    return render(request,'addaddress1.html')
 def addaddress1(request):
     if request.method == "POST":
         firstname    = request.POST.get('firstname')
@@ -352,10 +354,10 @@ def addaddress1(request):
         pincode    = request.POST.get('pincode')
 
         address = Address(firstname=firstname,lastname=lastname,housename=housename,locality=locality,city=city,state=state,pincode=pincode,phonenumber=phonenumber,user = request.user)
-        print('11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111')
+        
         address.save()
 
-        return (checkout)
+        return redirect ("userprofile")
     return render(request,'addaddress1.html')
 
 

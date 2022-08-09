@@ -101,8 +101,10 @@
 
             <div class="col-md-10">
               <div class="card mb-4 mb-md-0">
+
                 
                 <div class="card-body">
+
                   
                   {{address.firstname}} 
                   {{address.lastname}}, <br>
@@ -113,6 +115,13 @@
                   {{address.city}}<br>
                   {{address.state}}<br>
                   {{address.pincode}}
+                  <br><br>
+                  <div class="d-flex justify-content-between">
+                    <a href="{% url 'editaddress' address.id %}" class="btn btn-warning">edit</a> 
+
+      <a href="{% url 'addressdelete' address.id %}" class="btn btn-warning">delete</a>
+
+                  </div>
                     
 
                   

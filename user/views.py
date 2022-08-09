@@ -43,8 +43,6 @@ def home(request):
     onsale = Product.objects.filter(category =cat1 )[0:4]
     laps = Product.objects.filter(category =cat3 )[0:4]
 
-    
-
 
 
     return render(request,'index.html',{'values':values1,'acc':acc ,'values2':values2,'values3':values3,'banner':banner,'hot':hot,'onsale':onsale,'laps':laps})
@@ -257,6 +255,7 @@ def changepassword(request):
         current_password = request.POST.get('currentpassword')
         new_password = request.POST.get('newpassword')
         confirm_password = request.POST.get('confirmpassword')
+        
 
         
         acc = Account.objects.get(email = request.user)
@@ -266,9 +265,10 @@ def changepassword(request):
             if  passw:
                 acc.set_password(new_password) 
                 acc.save()
+                login(request,acc)
                 messages.success(request,"password changed Succesfully !")
 
-                return redirect(userSignin)
+                return redirect(userprofile)
             else:
                 messages.error(request,"password doesnt exist !")
                 return redirect('changepassword')
@@ -363,3 +363,36 @@ def orderreturn(request,id):
     product.save()
 
     return redirect(myorders)
+
+def addressdelete(request,id):
+    address = Address.objects.get(id = id)
+    address.delete()
+    return redirect(userprofile)
+
+def editaddress(request,id):
+    address = Address.objects.get(id = id)
+    if request.method == "POST":
+        firstname    = request.POST.get('firstname')
+        lastname    = request.POST.get('lastname')
+        housename    = request.POST.get('housename')
+        locality    = request.POST.get('locality')
+        city    = request.POST.get('city')
+        state    = request.POST.get('state')
+        pincode    = request.POST.get('pincode')
+        phonenumber    = request.POST.get('phonenumber')
+        
+
+        address.firstname = firstname
+        address.lastname = lastname
+        address.housename = housename
+        address.locality = locality
+        address.city = city
+        address.state = state
+        address.pincode = pincode
+        address.phonenumber = phonenumber
+        address.save()
+
+        return redirect(userprofile)
+
+    return render (request,"editaddress.html",{'address':address})
+    

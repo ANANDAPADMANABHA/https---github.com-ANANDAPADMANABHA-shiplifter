@@ -29,6 +29,7 @@
                     <div class="col-xl-6">
                         <div class="product__details-nav d-sm-flex align-items-start">
                             <ul class="nav nav-tabs flex-sm-column justify-content-between" id="productThumbTab" role="tablist">
+                                
                                 <li class="nav-item" role="presentation">
                                   <button class="nav-link active" id="thumbOne-tab" data-bs-toggle="tab" data-bs-target="#thumbOne" type="button" role="tab" aria-controls="thumbOne" aria-selected="true">
                                       <img src="{{thisProduct.image}}" alt="" style="height: 2rem ;">
@@ -48,26 +49,41 @@
                             <div class="product__details-thumb">
                                 <div class="tab-content" id="productThumbContent">
                                     <div class="tab-pane fade show active" id="thumbOne" role="tabpanel" aria-labelledby="thumbOne-tab">
-                                        <div class="product__details-nav-thumb w-img">
-                                            <img src="{{thisProduct.image}}" alt="">
+                                        <div class="img-zoom-container product__details-nav-thumb w-img">
+                                            <img id="myimage"src="{{thisProduct.image}}" alt="">
                                         </div>
                                     </div>
                                     <div class="tab-pane fade" id="thumbTwo" role="tabpanel" aria-labelledby="thumbTwo-tab">
-                                        <div class="product__details-nav-thumb w-img">
-                                            <img src="{{thisProduct.image}}" alt="">
+                                        <div class="img-zoom-container product__details-nav-thumb w-img">
+                                            <img id="myimage" src="{{thisProduct.image1}}" alt="">
                                         </div>
                                     </div>
                                     <div class="tab-pane fade" id="thumbThree" role="tabpanel" aria-labelledby="thumbThree-tab">
-                                        <div class="product__details-nav-thumb w-img">
-                                            <img src="{{thisProduct.image}}" alt="">
+                                        <div class="img-zoom-container product__details-nav-thumb w-img">
+                                            <img id="myimage" src="{{thisProduct.image2}}" alt="">
                                         </div>
                                     </div>
                                   </div>
                             </div>
+                            
+  
+ 
                         </div>
                     </div>
-                    <div class="col-xl-6">
+                  
+                    <div id="myresult"  class="col-xl-2"></div>
+                    
+
+               
+
+           
+                        
+                        
+                     
+                    <div class="col-xl-4">
                         <div class="product__details-content">
+                            
+
                             <h6>{{thisProduct.name}}</h6>
                             <div class="pd-rating mb-10">
                                 <ul class="rating">
@@ -490,6 +506,70 @@
             </div>
         </div>
         <!-- shop modal end -->
+        <script>
+            function imageZoom(imgID, resultID) {
+              var img, lens, result, cx, cy;
+              img = document.getElementById(imgID);
+              result = document.getElementById(resultID);
+              /*create lens:*/
+              lens = document.createElement("DIV");
+              lens.setAttribute("class", "img-zoom-lens");
+              /*insert lens:*/
+              img.parentElement.insertBefore(lens, img);
+              /*calculate the ratio between result DIV and lens:*/
+              cx = result.offsetWidth / lens.offsetWidth;
+              cy = result.offsetHeight / lens.offsetHeight;
+              /*set background properties for the result DIV:*/
+              result.style.backgroundImage = "url('" + img.src + "')";
+              result.style.backgroundSize = (img.width * cx) + "px " + (img.height * cy) + "px";
+              /*execute a function when someone moves the cursor over the image, or the lens:*/
+              lens.addEventListener("mousemove", moveLens);
+              img.addEventListener("mousemove", moveLens);
+              /*and also for touch screens:*/
+              lens.addEventListener("touchmove", moveLens);
+              img.addEventListener("touchmove", moveLens);
+              function moveLens(e) {
+                var pos, x, y;
+                /*prevent any other actions that may occur when moving over the image:*/
+                e.preventDefault();
+                /*get the cursor's x and y positions:*/
+                pos = getCursorPos(e);
+                /*calculate the position of the lens:*/
+                x = pos.x - (lens.offsetWidth / 2);
+                y = pos.y - (lens.offsetHeight / 2);
+                /*prevent the lens from being positioned outside the image:*/
+                if (x > img.width - lens.offsetWidth) {x = img.width - lens.offsetWidth;}
+                if (x < 0) {x = 0;}
+                if (y > img.height - lens.offsetHeight) {y = img.height - lens.offsetHeight;}
+                if (y < 0) {y = 0;}
+                /*set the position of the lens:*/
+                lens.style.left = x + "px";
+                lens.style.top = y + "px";
+                /*display what the lens "sees":*/
+                result.style.backgroundPosition = "-" + (x * cx) + "px -" + (y * cy) + "px";
+              }
+              function getCursorPos(e) {
+                var a, x = 0, y = 0;
+                e = e || window.event;
+                /*get the x and y positions of the image:*/
+                a = img.getBoundingClientRect();
+                /*calculate the cursor's x and y coordinates, relative to the image:*/
+                x = e.pageX - a.left;
+                y = e.pageY - a.top;
+                /*consider any page scrolling:*/
+                x = x - window.pageXOffset;
+                y = y - window.pageYOffset;
+                return {x : x, y : y};
+              }
+            }
+            </script>
+            <script>
+                // Initiate zoom effect:
+                imageZoom("myimage", "myresult");
+                imageZoom("myimage1", "myresult");
 
+                
+
+                </script>
     </main>
     {% endblock %}

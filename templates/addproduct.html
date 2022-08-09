@@ -51,7 +51,7 @@
               </div>
               <div class="form-group">
                 <label for="">offer</label>
-                <input type="number" class="form-control" id="" placeholder="offer" name="stock" >
+                <input type="number" class="form-control" id="" placeholder="offer" name="offer" >
                 {% for message in messages %}
                                 {%if "offerproduct" in message.tags %}
                                      <p>{{message}}</p>
@@ -60,7 +60,7 @@
               </div>
               <div class="form-group">
                 <label for="">stock</label>
-                <input type="number" class="form-control" id="" placeholder="Stock" name="offer" >
+                <input type="number" class="form-control" id="" placeholder="Stock" name="stock" >
                 {% for message in messages %}
                                 {%if "product_stock" in message.tags %}
                                      <p>{{message}}</p>

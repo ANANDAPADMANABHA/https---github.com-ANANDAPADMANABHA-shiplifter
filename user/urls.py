@@ -23,6 +23,12 @@ urlpatterns = [
     path('shoptab',views.shoptab,name='shoptab'), 
     path('limiteddeal',views.limiteddeal,name='limiteddeal'),  
     path('demand',views.demand,name='demand'),  
+    
+    
+    path('addressdelete/<int:id>/',views.addressdelete,name='addressdelete') ,
+    path('editaddress/<int:id>/',views.editaddress,name='editaddress') ,
+
+
 
     
     path('orderdetails/<int:id>/',views.orderdetails,name='orderdetails'),
