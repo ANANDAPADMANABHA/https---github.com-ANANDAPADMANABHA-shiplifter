@@ -4,7 +4,7 @@
     <span class="count count-2">{{x}}</span>
     <span class="text">
     <span class="sub">Your Cart:</span>
-    ${{grand_total}}</span>
+    ₹{{grand_totalcontext}}</span>
     </a>
     <div class="cart">
         <div class="cart__mini">
@@ -27,7 +27,7 @@
                   </div>
                 </li>
                 <li>
-                    {% for cart in cart_items %}
+                    {% for cart in cart_itemscontext %}
                   <div class="cart__item d-flex justify-content-between align-items-center">
                     <div class="cart__inner d-flex">
                       <div class="cart__thumb">
@@ -39,7 +39,7 @@
                       <div class="cart__details">
                         <h6><a href="{% url 'productdisplay' cart.product.id %}"> {{cart.product}}  </a></h6>
                         <div class="cart__price">
-                          <span>${{cart.cartprice}}</span>
+                          <span>₹{{cart.cartprice}}</span>
                         </div>
                       </div>
                     </div>
@@ -58,7 +58,7 @@
                 <li>
                   <div class="cart__sub d-flex justify-content-between align-items-center">
                     <h6>Subtotal</h6>
-                    <span class="cart__sub-total">${{grand_total}}</span>
+                    <span class="cart__sub-total">₹{{grand_totalcontext}}</span>
                   </div>
                 </li>
                 <li>

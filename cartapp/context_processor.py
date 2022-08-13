@@ -16,11 +16,11 @@ def extras(request,total = 0, quantity = 0, cart_items =None,tax = 0,grand_total
 
         try:    
             try:
-                counts = CartItem.objects.filter(user = request.user, is_active = True).count()
+                counts = CartItem.objects.filter(user = request.user, is_active = True,buy_now = False).count()
             except:
                 counts = 0
             
-            cart_items  = CartItem.objects.filter(user = request.user, is_active = True).order_by("-id")[0:2]
+            cart_items  = CartItem.objects.filter(user = request.user, is_active = True,buy_now = False).order_by("-id")[0:2]
             
             for cart_item in cart_items:
                 total += (cart_item.product.offer_price() * cart_item.quantity)
@@ -36,11 +36,11 @@ def extras(request,total = 0, quantity = 0, cart_items =None,tax = 0,grand_total
         try:
             cart        = Cart.objects.get(cart_id = _cart_id(request))
             try:
-                counts  = CartItem.objects.filter(cart = cart, is_active = True).count()
+                counts  = CartItem.objects.filter(cart = cart, is_active = True,buy_now = False).count()
             except:
                 counts = 0
 
-            cart_items  = CartItem.objects.filter(cart = cart, is_active = True)
+            cart_items  = CartItem.objects.filter(cart = cart, is_active = True,buy_now = False)
             for cart_item in cart_items:
                 total += (cart_item.product.offer_price() * cart_item.quantity)
                 quantity += cart_item.quantity
@@ -52,10 +52,10 @@ def extras(request,total = 0, quantity = 0, cart_items =None,tax = 0,grand_total
 
     context = {
         
-        'quantity':quantity,
-        'cart_items':cart_items,
+        'quantitycontext':quantity,
+        'cart_itemscontext':cart_items,
         'x':counts,
-        'grand_total':grand_total,
+        'grand_totalcontext':round(grand_total,2),
         }
 
     return dict(context)

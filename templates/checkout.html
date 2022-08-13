@@ -71,7 +71,7 @@
                                                 {{cart_item.product.name}} <strong class="product-quantity"> × {{cart_item.quantity}}</strong>
                                             </td>
                                             <td class="product-total">
-                                                <span class="amount">${{cart_item.cartprice}}</span>
+                                                <span class="amount">₹{{cart_item.cartprice}}</span>
                                             </td>
                                         </tr>
                                         {% endfor %}
@@ -80,11 +80,11 @@
                                     <tfoot>
                                         <tr class="cart-subtotal">
                                             <th>Cart Subtotal</th>
-                                            <td><span class="amount">${{total}}</span></td>
+                                            <td><span class="amount">₹{{total}}</span></td>
                                         </tr>
                                         <tr class="cart-subtotal">
                                             <th>Tax</th>
-                                            <td><span class="amount">${{tax}}</span></td>
+                                            <td><span class="amount">₹{{tax}}</span></td>
                                         </tr>
                                         
                                         <tr class="order-total">

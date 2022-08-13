@@ -98,3 +98,12 @@ class Address(models.Model):
 
     def __str__(self):
         return self.firstname
+
+class trial(models.Model):
+    first_name      =   models.CharField(max_length=50 ,null=True)
+    last_name       =   models.CharField(max_length=50 ,null=True)
+    username        =   models.CharField(max_length=50 , unique=True)
+    email           =   models.EmailField(max_length=100, unique=True)
+    phone_number    =   models.CharField(max_length=50, unique=True,null=True)
+    password        =   models.CharField(max_length=50, unique=True,null=True)
+    

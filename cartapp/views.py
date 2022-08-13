@@ -21,9 +21,16 @@ from django.contrib import auth
 from orders.models import OrderProduct, Orders, Payment
 from datetime import date 
 from user.views import *
+# from user.views import home
+
 
 from django.views.decorators.cache import cache_control
 # from user.views import 
+from django.template.loader import render_to_string
+# from weasyprint import HTML
+
+import tempfile
+ 
 
 
 
@@ -72,6 +79,17 @@ def add_cart(request , product_id):
 
     return redirect (cartview)
 
+def buy_now(request,product_id):
+    if request.user.is_authenticated:
+        cartclear = CartItem.objects.filter(buy_now = True , user = request.user)
+        cartclear.delete()
+        product = Product.objects.get(id = product_id)
+        cart = CartItem(product = product,quantity=1,user = request.user,cartprice=product.offer_price(),buy_now = True)
+        cart.save()
+        return redirect(checkout)
+    else :
+        return redirect(signin)
+
 def add_cartplus(request , product_id):
     total = 0
     quantity = 0
@@ -114,7 +132,7 @@ def add_cartplus(request , product_id):
 
         context = {
         'total':total,
-        'tax':tax,
+        'tax':round(tax,2),
         'cart_items':cart_items,
         'quantity':quantity,
         'grand_total':grand_total
@@ -154,7 +172,7 @@ def add_cartplus(request , product_id):
 
         context = {
         'total':total,
-        'tax':tax,
+        'tax':round(tax,2),
         'cart_items':cart_items,
         'quantity':quantity,
         'grand_total':grand_total
@@ -222,25 +240,13 @@ def couponapply(request):
             pass
     return redirect(cartview)
 
-# def grandtotal(request,reduction):
-#     total = 0
-#     quantity = -
-#     cart_items  = CartItem.objects.filter(user = request.user, is_active = True)
-            
-#     for cart_item in cart_items:
-                
-                
-#         total += (cart_item.product.offer_price() * cart_item.quantity)
-#         quantity += cart_item.quantity
-#     tax = (2*total)/100
-#     grand_total = total + tax -reduction
-#     if grand_total <0:
-#         grand_total = tax
-#     return total
+
+
 
 def cartview(request,total = 0, quantity = 0, cart_items =None,tax = 0,grand_total =0):
 
-
+    cartclear = CartItem.objects.filter(buy_now = True , user = request.user)
+    cartclear.delete()
     
     if request.user.is_authenticated:
 
@@ -256,7 +262,9 @@ def cartview(request,total = 0, quantity = 0, cart_items =None,tax = 0,grand_tot
         try:
             
             
-            cart_items  = CartItem.objects.filter(user = request.user, is_active = True).order_by("-id")
+            cart_items  = CartItem.objects.filter(user = request.user, is_active = True,buy_now = False).order_by("-id")
+            
+            
             
             for cart_item in cart_items:
             
@@ -295,7 +303,7 @@ def cartview(request,total = 0, quantity = 0, cart_items =None,tax = 0,grand_tot
         'total':total,
         'quantity':quantity,
         'cart_items':cart_items,
-        'tax':tax,
+        'tax':round(tax,2),
         'grand_total':grand_total,
         }
     
@@ -366,7 +374,7 @@ def remove_cartminus(request, product_id):
         'total':total,
         'quantity':quantity,
         'cart_items':cart_items,
-        'tax':tax,
+        'tax':round(tax,2),
         'grand_total':grand_total,
         }
 
@@ -388,7 +396,7 @@ def remove_cartminus(request, product_id):
         'total':total,
         'quantity':quantity,
         'cart_items':cart_items,
-        'tax':tax,
+        'tax':round(tax,2),
         'grand_total':grand_total,
         }
 
@@ -579,34 +587,42 @@ def checkout(request):
     grand_total =0
     
     if request.user.is_authenticated:
-        if 'coupon_code' in request.session:
-            print('couponnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn')
-            coupon = Coupon.objects.get(coupon_code =request.session['coupon_code'])
-            reduction = coupon.discount 
-
-        else :
-            reduction = 0
+        cart_itemscount  = CartItem.objects.filter(user = request.user, is_active = True).count()
+        if cart_itemscount >  0:
 
 
-        try:
-            details = Address.objects.filter(user = request.user )
-            cart_items  = CartItem.objects.filter(user = request.user, is_active = True)
-            for cart_item in cart_items:
-                total += (cart_item.product.offer_price() * cart_item.quantity)
-                quantity += cart_item.quantity
-            tax = (2*total)/100
-            grand_total = total + tax-reduction
-            if grand_total <0:
-                grand_total = tax
-        except ObjectDoesNotExist:
-            pass #just ignore
+            if 'coupon_code' in request.session:
+                print('couponnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn')
+                coupon = Coupon.objects.get(coupon_code =request.session['coupon_code'])
+                reduction = coupon.discount 
+
+            else :
+                reduction = 0
+
+
+            try:
+                details = Address.objects.filter(user = request.user )
+                cart_items  = CartItem.objects.filter(user = request.user, is_active = True)
+                if CartItem.objects.filter(user = request.user,buy_now = True) :
+                    cart_items  =   CartItem.objects.filter(user = request.user,buy_now = True)
+                for cart_item in cart_items:
+                    total += (cart_item.product.offer_price() * cart_item.quantity)
+                    quantity += cart_item.quantity
+                tax = (2*total)/100
+                grand_total = total + tax-reduction
+                if grand_total <0:
+                    grand_total = tax
+            except ObjectDoesNotExist:
+                pass #just ignore
+        else:
+            return redirect('userhome')
 
         context = {
         'total':total,
         'quantity':quantity,
         'cart_items':cart_items,
-        'tax':tax,
-        'grand_total':grand_total,
+        'tax':round(tax,2),
+        'grand_total':round(grand_total,2),
         'details':details,
         }
 
@@ -682,6 +698,8 @@ def confirmpayment(request):
             order_id_generated = str(int(datetime.datetime.now().strftime('%Y%m%d%H%M%S')))
             details = Address.objects.get(id = theaddress ) #passed that spesific address in the details variable
             cart_items  = CartItem.objects.filter(user = request.user, is_active = True)
+            if CartItem.objects.filter(user = request.user,buy_now = True) :
+                    cart_items  =   CartItem.objects.filter(user = request.user,buy_now = True)
             for cart_item in cart_items:
                 total += (cart_item.product.offer_price() * cart_item.quantity)
                 quantity += cart_item.quantity
@@ -734,9 +752,11 @@ def placecod(request):
             order_id_generated = str(int(datetime.datetime.now().strftime('%Y%m%d%H%M%S')))
             user =  request.user
             cart_items  = CartItem.objects.filter(user = request.user, is_active = True)
+            if CartItem.objects.filter(user = request.user,buy_now = True) :
+                    cart_items  =   CartItem.objects.filter(user = request.user,buy_now = True)
             cart_itemcount = cart_items.count()
             if cart_itemcount <= 0 :
-                return render(request,'nothing.html')
+                return redirect('userhome')
             for cart_item in cart_items:
                 total += (cart_item.product.offer_price() * cart_item.quantity)
                 tax = (2*total)/100
@@ -756,6 +776,8 @@ def placecod(request):
 
             
             cart_items  = CartItem.objects.filter(user = request.user, is_active = True)
+            if CartItem.objects.filter(user = request.user,buy_now = True) :
+                    cart_items  =   CartItem.objects.filter(user = request.user,buy_now = True)
             
             
 
@@ -830,9 +852,11 @@ def paypal(request):
             order_id_generated = str(int(datetime.datetime.now().strftime('%Y%m%d%H%M%S')))
             user =  request.user
             cart_items  = CartItem.objects.filter(user = request.user, is_active = True)
+            if CartItem.objects.filter(user = request.user,buy_now = True) :
+                    cart_items  =   CartItem.objects.filter(user = request.user,buy_now = True)
             cart_itemcount = cart_items.count()
             if cart_itemcount <= 0 :
-                return render(request,'nothing.html')
+                return redirect('userhome')
             for cart_item in cart_items:
                 total += (cart_item.product.price * cart_item.quantity)
             tax = (2*total)/100
@@ -842,7 +866,7 @@ def paypal(request):
             oder.save()
 
             
-            cart_items  = CartItem.objects.filter(user = request.user, is_active = True)
+            
             order = Orders.objects.get(orderid = order_id_generated)
             Orderproduct = OrderProduct.objects.filter(order=order)
             context = {
@@ -872,13 +896,6 @@ def paypal(request):
         return redirect(cartview)
         
     
-    
-    
-            
-    
-    
-
-
 
 def payments(request):
     body = json.loads(request.body)
@@ -898,6 +915,8 @@ def payments(request):
     order.save()
     #MOVE THE CART ITEMS TO ORDER PRODUCTS TABLE
     cart_items  = CartItem.objects.filter(user = request.user, is_active = True)
+    if CartItem.objects.filter(user = request.user,buy_now = True) :
+        cart_items  =   CartItem.objects.filter(user = request.user,buy_now = True)
     for x in cart_items:
                 
         Orderproduct = OrderProduct(order=order)
@@ -911,13 +930,9 @@ def payments(request):
         product.stock -= x.quantity
         product.save()
     #CLEAR CART
-    for x in cart_items:
-        x.delete()
-
+    
+    cart_items.delete()
     #SEND ORDER RECIEVED EMAIL TO CUSTOMER
-
-
-
 
     #SEND ORDER NUMBER AND TRANSACTION ID BACK TO SEND DATA METHOD VIA JASON RESPONDS
     data = {
@@ -968,178 +983,12 @@ def order_complete(request):
 
     except (Payment.DoesNotExist,Orders.DoesNotExist):
         return redirect("userhome")
-# --------------------------------------------------------------------------------------------------------------
-# def paypal(request):
-#     total = 0
-#     quantity = 0
-#     cart_items =None
-#     tax = 0
-#     grand_total =0
-#     if request.user.is_authenticated:
-#         if 'coupon_code' in request.session:
-#             print('couponnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn')
-#             coupon = Coupon.objects.get(coupon_code =request.session['coupon_code'])
-#             reduction = coupon.discount 
-
-#         else :
-#             reduction = 0
-#         try:
-
-#             details = Address.objects.get(id = theaddress ) #passed that spesific address in the details variable
-#             order_id_generated = str(int(datetime.datetime.now().strftime('%Y%m%d%H%M%S')))
-#             user =  request.user
-#             cart_items  = CartItem.objects.filter(user = request.user, is_active = True)
-#             cart_itemcount = cart_items.count()
-#             if cart_itemcount <= 0 :
-#                 return render(request,'nothing.html')
-#             for cart_item in cart_items:
-#                 total += (cart_item.product.offer_price() * cart_item.quantity)
-                
-#             oder = Orders(user=user,address=details ,ordertotal = total,orderid =order_id_generated)
-#             oder.save()
-
-            
-#             cart_items  = CartItem.objects.filter(user = request.user, is_active = True)
-
-            
-            
-
-#         except ObjectDoesNotExist:
-#             pass #just ignore
-
-        
-        
-
-#     else:
-#         return redirect(cartview)
-        
-#     order = Orders.objects.get(orderid = order_id_generated)
-#     Orderproduct = OrderProduct.objects.filter(order=order)
-#     for cart_item in Orderproduct:
-#         total += (cart_item.product.offer_price() * cart_item.quantity)
-#         quantity += cart_item.quantity
-#     tax = (2*total)/100
-#     grand_total = total + tax-reduction
-            
-#     context = {
-#     'cart_items':cart_items,
-#     'order' :order,
-#     "order_id_generated" :order_id_generated,
-#     'total':total,
-#     'quantity':quantity,
-#     'Orderproduct':Orderproduct,
-#     'tax':tax,
-#     'grand_total':grand_total,
-#     'details':details,
-        
-#         }
-#     return render(request, 'paypal.html',context)
-    
-
-
-
-# def payments(request):
-#     body = json.loads(request.body)
-#     order = Orders.objects.get(orderid = body['orderID'] )
-#     payment = Payment(
-
-#         user = request.user,
-#         payment_id = body['transID'],
-#         payment_method = body['payment_method'],
-#         amount_paid = order.ordertotal,
-#         status = body['status'],
-#     )
-#     payment.save()
-#     print(body)
-#     order.payment = payment
-#     order.is_ordered =True
-#     order.save()
-#     #MOVE THE CART ITEMS TO ORDER PRODUCTS TABLE
-#     cart_items  = CartItem.objects.filter(user = request.user, is_active = True)
-#     for x in cart_items:
-                
-#         Orderproduct = OrderProduct(order=order)
-#         Orderproduct.product = x.product
-#         Orderproduct.quantity = x.quantity
-#         Orderproduct.price = x.product.price
-#         Orderproduct.save()
-#     #REDUCE THE QUANTITY OF STOCK
-
-#         product = Product.objects.get(id = x.product.id)
-#         product.stock -= x.quantity
-#         product.save()
-#     #CLEAR CART
-#     for x in cart_items:
-#         x.delete()
-
-#     #SEND ORDER RECIEVED EMAIL TO CUSTOMER
-
-
-
-
-#     #SEND ORDER NUMBER AND TRANSACTION ID BACK TO SEND DATA METHOD VIA JASON RESPONDS
-#     data = {
-#         "orderID":order.orderid,
-#         "transID":payment.payment_id,
-#     }
-
-
-#     return JsonResponse(data)
-
-
-# def order_complete(request):
-#     total = 0
-#     quantity = 0
-#     cart_items =None
-#     tax = 0
-#     grand_total =0
-#     order_number    = request.GET.get("orderID")
-#     transID         = request.GET.get("transID")
-#     print(order_number)
-
-#     try:
-#         if 'coupon_code' in request.session:
-#             print('couponnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn')
-#             coupon = Coupon.objects.get(coupon_code =request.session['coupon_code'])
-#             reduction = coupon.discount 
-
-#         else :
-#             reduction = 0
-#         dates =date.today()   
-#         details = Address.objects.get(id = theaddress )
-#         order = Orders.objects.get(orderid = order_number)
-#         ordered_products = OrderProduct.objects.filter(order = order)
-#         Orderproduct = OrderProduct.objects.filter(order=order)
-#         for cart_item in Orderproduct:
-#             total += (cart_item.product.offer_price() * cart_item.quantity)
-
-#             quantity += cart_item.quantity
-#         tax = (2*total)/100
-#         grand_total = total + tax-reduction
-
-#         context = {
-#             "order":order,
-#             "ordered_products":ordered_products,
-#             "orderID":order.orderid,
-#             "details":details,
-#             "transID":transID,
-#             "dates":dates,
-#             "grand_total":grand_total,
-#             "tax":tax,
-#             "total":total
-#         }
-#         if 'coupon_code' in request.session:
-#             coupons = Coupon.objects.get(coupon_code =request.session['coupon_code'])
-#             x = UsedCoupon(user = request.user , coupon =coupons )
-#             x.save()
-#             del request.session['coupon_code']
-#         return render(request,"order_complete.html",context)
-
-#     except (Payment.DoesNotExist,Orders.DoesNotExist):
-#         return redirect("userhome")
+# -------------------------------------------------------------------------------------------------------
 def razorpayhome(request):
     total = 0
     cart_items  = CartItem.objects.filter(user = request.user, is_active = True) 
+    if CartItem.objects.filter(user = request.user,buy_now = True) :
+        cart_items  =   CartItem.objects.filter(user = request.user,buy_now = True)
 
     for cart_item in cart_items:
         total += (cart_item.product.offer_price() * cart_item.quantity)
@@ -1148,8 +997,7 @@ def razorpayhome(request):
         
         
         client = razorpay.Client(auth=(settings.KEY , settings.SECRET ))
-        
-    
+
         payment = client.order.create({ 
                 "amount": total*100,
                 "currency": "INR",  
@@ -1185,9 +1033,11 @@ def razorpaysuccess(request):
             reduction = 0
         #place payment
         cart_items  = CartItem.objects.filter(user = request.user, is_active = True)
+        if CartItem.objects.filter(user = request.user,buy_now = True) :
+                cart_items  =   CartItem.objects.filter(user = request.user,buy_now = True)
         cart_itemcount = cart_items.count()
         if cart_itemcount <= 0 :
-            return render(request,'nothing.html')
+            return redirect('userhome')
         for cart_item in cart_items:
             total += (cart_item.product.offer_price() * cart_item.quantity)
         tax = (2*total)/100
@@ -1221,8 +1071,8 @@ def razorpaysuccess(request):
             product.stock -= x.quantity
             product.save()
             
-        for x in cart_items:
-            x.delete()
+        
+        cart_items.delete()
         
         #for context
         
@@ -1251,7 +1101,4 @@ def razorpaysuccess(request):
         return redirect("userhome")
 
     
-    
-
-
     

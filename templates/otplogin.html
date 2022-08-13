@@ -29,7 +29,7 @@
 			<div class="row justify-content-center">
 				<div class="col-md-12 col-lg-10">
 					<div class="wrap d-md-flex">
-						<div class="img" style="background-image:url({% static 'reg/images/bg-1.jpg' %} );">
+						<div class="img" style="background-image:url({% static 'reg/images/logootp1.png' %});">
 			      </div>
 						<div class="login-wrap p-4 p-md-5">
 			      	<div class="d-flex">
@@ -38,11 +38,16 @@
 			      		</div>
 
 			      	</div>
-							<form action="" class="signin-form" method="POST">
+							<form action="{% url 'otpenter' phone_number %}" class="signin-form" method="POST">
                                 {% csrf_token %}
 			      		<div class="form-group mb-3">
 			      			<label >Please enter the otp code you receieved</label>
 			      			<input type="number" class="form-control" name="otp" placeholder= "Enter otp" required>
+							  {% if messages %}
+							  {% for message in messages %}
+								  {{message}}
+							   {% endfor %}
+							   {% endif %}
 			      		</div>
 		
 		            <div class="form-group">
@@ -50,7 +55,7 @@
 		            </div>
 
 		          </form>
-		          <p class="text-center"> <a href="signinandsignup">Go back</a></p>
+		          <p class="text-center"> <a href="{% url 'otp' %}">Go back</a></p>
 		        </div>
 		      </div>
 				</div>

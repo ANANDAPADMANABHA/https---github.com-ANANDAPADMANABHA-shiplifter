@@ -97,8 +97,8 @@
                                 <span><a href="#">Add your review</a></span>
                             </div>
                             <div class="price mb-10">
-                                <del>${{thisProduct.price}}</del>
-                                <span>${{thisProduct.offer_price}}</span>
+                                <del>₹{{thisProduct.price}}</del>
+                                <span>₹{{thisProduct.offer_price}}</span>
                             </div>
                             <div class="features-des mb-20 mt-10">
                                 <ul>
@@ -114,6 +114,11 @@
                             <div class="cart-option mb-15">
                                
                                 <a href="{% url 'add_cart' thisProduct.id %}" class="cart-btn">Add to Cart</a> 
+                                
+                            </div>
+                            <div class="cart-option mb-15">
+                               
+                                <a href="{% url 'buy_now' thisProduct.id %}" class="cart-btn">Buy now</a> 
                                 
                             </div>
                             <div class="details-meta">
@@ -260,7 +265,7 @@
                                </li>
                                <li>
                                   <h6>Shipping</h6>
-                                  <span>Standard shipping: $5,95</span>
+                                  <span>Standard shipping: ₹5,95</span>
                                </li>
                                <li>
                                   <h6>Care Info</h6>
@@ -455,7 +460,7 @@
                                         </div>
                                     </div>
                                     <div class="product__price">
-                                        <span>$109.00 – $307.00</span>
+                                        <span>₹109.00 – ₹307.00</span>
                                     </div>
                                     <div class="product__modal-des mt-20 mb-15">
                                         <ul>

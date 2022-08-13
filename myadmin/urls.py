@@ -13,10 +13,12 @@ urlpatterns = [
     path('signout',views.adminLogout,name='signout'),  
     path('addcategory',views.addcategory) ,
     path('deletecategory/<int:id>/',views.deletecategory,name='deletecategory'),
-    path('blockuser/<int:id>/',views.blockuser),
+    path('blockuser/<int:id>/',views.blockuser,name='blockuser'),
     path('orderdisplay',views.orderdisplay,name='orderdisplay') , 
     path('orderstatus/<int:id>/',views.orderstatus,name='orderstatus')  ,
     path('offerstatus/<int:id>/',views.offerstatus,name='offerstatus')  ,
+    path('offerstatusedit/<int:id>/',views.offerstatusedit,name='offerstatusedit')  ,
+    
     path('searchprod',views.searchprod,name='searchprod')  , 
     path('orderdetailsadmin/<int:id>/',views.orderdetailsadmin,name='orderdetailsadmin') ,
     path('couponlist',views.couponlist,name='couponlist') , 
@@ -35,6 +37,18 @@ urlpatterns = [
     path('addbanner', views.addbanner, name='addbanner'),
     path('deletebanner/<int:id>/', views.deletebanner, name='deletebanner'),
     path('selectbanner/<int:id>/', views.selectbanner, name='selectbanner'),
+    path('offermanage', views.offermanage, name='offermanage'),
+    path('productoffermanage', views.productoffermanage, name='productoffermanage'),
+    path('categoryoffermanage', views.categoryoffermanage, name='categoryoffermanage'),
+
+    path('disablecatoffer/<int:id>/', views.disablecatoffer, name='disablecatoffer'),
+    path('offerstatuseditproduct/<int:id>/', views.offerstatuseditproduct, name='offerstatuseditproduct'),
+    path('disableprodoffer/<int:id>/', views.disableprodoffer, name='disableprodoffer'),
+
+    
+
+    
+    
     
 
 

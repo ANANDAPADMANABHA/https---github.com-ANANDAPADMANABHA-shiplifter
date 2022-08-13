@@ -10,6 +10,8 @@ urlpatterns = [
     path('add_cartplus/<int:product_id>/',views.add_cartplus, name='add_cartplus'),
 
     
+    path('buy_now/<int:product_id>/',views.buy_now, name='buy_now'), 
+
     path('add_cartsimple/<int:product_id>/',views.add_cartsimple, name='add_cartsimple'), 
     path('remove_cartminus/<int:product_id>/',views.remove_cartminus,name ='remove_cartminus' ),
 

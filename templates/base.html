@@ -198,10 +198,10 @@
                                     <ul>
                                         
                                         
-                                        <li><a href="about.html">About Us</a></li>
-                                        <li><a href="contact.html">Order Tracking</a></li>
-                                        <li><a href="contact.html">Contact Us</a></li>
-                                        <li><a href="faq.html">FAQs</a></li>
+                                        <li><a href="">About Us</a></li>
+                                        <li><a href="">Order Tracking</a></li>
+                                        <li><a href="">Contact Us</a></li>
+                                        <li><a href="">FAQs</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -279,72 +279,9 @@
                             
                                 
                                 <div class="block-cart action" id="cartboxhome">
-                            {% include "htmx_deletehome.html" %}
+                              {% include "htmx_deletehome.html" %}
 
-                                    <!-- <a class="icon-link icon-link-2" href="{% url 'cartview' %}">
-                                    <i class="flaticon-shopping-bag"></i>
-                                    
-                                    <span class="count count-2">{{x}}</span>
-                                    <span class="text">
-                                    <span class="sub">Your Cart:</span>
-                                    ${{grand_total}}</span>
-                                    </a>
-                                    <div class="cart">
-                                        <div class="cart__mini">
-                                            <ul>
-                                                <li>
-                                                  <div class="cart__title">
-                                                    <h4>Your Cart</h4>
-                                                    {% if x > 1 %}
-                                                    <span>( {{x}} Items in Cart)</span>
-                                                    {% elif x == 1 %}
-                                                    <span>( 1 Item in Cart)</span>
-                                                    {% else %}
-                                                    <span>( no Item in Cart)</span>
-                                                    {% endif %}
-                                                
-
-
-
-
-                                                  </div>
-                                                </li>
-                                                <li>
-                                                    {% for cart in cart_items %}
-                                                  <div class="cart__item d-flex justify-content-between align-items-center">
-                                                    <div class="cart__inner d-flex">
-                                                      <div class="cart__thumb">
-                                                        <a href="{% url 'productdisplay' cart.product.id %}">
-                                                          <img src="{{cart.product.image}}" alt="">
-                                                        </a>
-                                                      </div>
-
-                                                      <div class="cart__details">
-                                                        <h6><a href="{% url 'productdisplay' cart.product.id %}"> {{cart.product}}  </a></h6>
-                                                        <div class="cart__price">
-                                                          <span>${{cart.cartprice}}</span>
-                                                        </div>
-                                                      </div>
-                                                    </div>
-                                                    <div class="cart__del">
-                                                        <a href="{% url 'delete_cart' cart.id %}"><i class="fal fa-times"></i></a>
-                                                    </div>
-                                                  </div>
-                                                  {% endfor %}
-                                                </li>
-                                                <li>
-                                                  <div class="cart__sub d-flex justify-content-between align-items-center">
-                                                    <h6>Subtotal</h6>
-                                                    <span class="cart__sub-total">${{grand_total}}</span>
-                                                  </div>
-                                                </li>
-                                                <li>
-                                                    <a href="{% url 'cartview' %}" class="wc-cart mb-10">View cart</a>
-                                                    <a href="{% url 'checkout' %}" class="wc-checkout">Checkout</a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div> -->
+                                   
                                 </div>
                             </div>
                         </div>
@@ -401,7 +338,8 @@
                     <a href="{% url 'userhome' %}" class="active">Home <i class="far fa-angle-down"></i></a>
                     
                 </li>
-                <li><a href="about.html">About Us</a></li>
+
+              
                
                 <li>
                     {% if user.is_authenticated %}
@@ -409,6 +347,22 @@
                    {% else %}
 
                    {% endif %}
+                </li>
+                <li>
+                    <a href="{% url 'shopphone' %}" class="active"> Mobile Phones <i class="far fa-angle-down"></i></a>
+                    
+                </li>
+                <li>
+                    <a href="{% url 'shoptab' %}" class="active">Tablets <i class="far fa-angle-down"></i></a>
+                    
+                </li>
+                <li>
+                    <a href="{% url 'shopheadphone' %}" class="active">Headphones <i class="far fa-angle-down"></i></a>
+                    
+                </li>
+                <li>
+                    <a href="{% url 'limiteddeal' %}" class="active">Limited Deal <i class="far fa-angle-down"></i></a>
+                    
                 </li>
             </ul>
         </nav>
@@ -509,7 +463,7 @@
                 <div class="product__offer">
                     {% if x.category.offer %}
                 <span class="discount">-{{x.category.offer}}</span>
-          >
+          
                 {% endif %}
 
                 </div>
@@ -543,9 +497,9 @@
                 <div class="price mb-20">
                     
                     {% if x.offer_price %}
-                    <span>OFFER   {{x.offer_price}} $</span>
+                    <span>OFFER   {{x.offer_price}} ₹</span>
                     {% else %}
-                    <span>{{x.price}} $</span>
+                    <span>{{x.price}} ₹</span>
                     {% endif %}
 
 
@@ -616,12 +570,12 @@
                                 <div class="footer__widget-content">
                                     <div class="footer__link footer__link-2">
                                         <ul>
-                                            <li><a href="contact.html">Product Support</a></li>
-                                            <li><a href="checkout.html">Checkout</a></li>
-                                            <li><a href="cart.html">Shopping Cart</a></li>
-                                            <li><a href="wishlist.html">Wishlist</a></li>
-                                            <li><a href="faq.html">Terms &amp; Conditions &amp;</a></li>
-                                            <li><a href="faq.html">Redeem Voucher</a></li>
+                                            <li><a href="">Product Support</a></li>
+                                            <li><a href="">Checkout</a></li>
+                                            <li><a href="">Shopping Cart</a></li>
+                                            <li><a href="">Wishlist</a></li>
+                                            <li><a href="">Terms &amp; Conditions &amp;</a></li>
+                                            <li><a href="">Redeem Voucher</a></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -635,12 +589,12 @@
                                 <div class="footer__widget-content">
                                     <div class="footer__link footer__link-2">
                                         <ul>
-                                            <li><a href="faq.html">New Customers</a></li>
-                                            <li><a href="faq.html">How to use Account</a></li>
-                                            <li><a href="faq.html">Placing an Order</a></li>
-                                            <li><a href="faq.html">Payment Methods</a></li>
-                                            <li><a href="faq.html">Delivery &amp; Dispatch</a></li>
-                                            <li><a href="faq.html">Problems with Order</a></li>
+                                            <li><a href="">New Customers</a></li>
+                                            <li><a href="">How to use Account</a></li>
+                                            <li><a href="">Placing an Order</a></li>
+                                            <li><a href="">Payment Methods</a></li>
+                                            <li><a href="">Delivery &amp; Dispatch</a></li>
+                                            <li><a href="">Problems with Order</a></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -654,11 +608,11 @@
                                 <div class="footer__widget-content">
                                     <div class="footer__link footer__link-2">
                                         <ul>
-                                            <li><a href="faq.html">Help Center</a></li>
-                                            <li><a href="contact.html">Contact Us</a></li>
-                                            <li><a href="faq.html">Report Abuse</a></li>
-                                            <li><a href="faq.html">Submit a Dispute</a></li>
-                                            <li><a href="faq.html">Policies &amp; Rules</a></li>
+                                            <li><a href="">Help Center</a></li>
+                                            <li><a href="">Contact Us</a></li>
+                                            <li><a href="">Report Abuse</a></li>
+                                            <li><a href="">Submit a Dispute</a></li>
+                                            <li><a href="">Policies &amp; Rules</a></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -691,13 +645,13 @@
                             <div class="col-xl-12">
                                 <div class="footer__links footer__links-d text-center mb-25">
                                     <p>
-                                        <a href="about.html">About Us</a>
-                                        <a href="contact.html">Delivery & Return</a>
-                                        <a href="faq.html">Privacy Policy</a>
-                                        <a href="faq.html">Help</a>
-                                        <a href="faq.html">Order Tracking</a>
-                                        <a href="contact.html">Contact Us</a>
-                                        <a href="faq.html">FAQs </a>
+                                        <a href="">About Us</a>
+                                        <a href="">Delivery & Return</a>
+                                        <a href="">Privacy Policy</a>
+                                        <a href="">Help</a>
+                                        <a href="">Order Tracking</a>
+                                        <a href="">Contact Us</a>
+                                        <a href="">FAQs </a>
                                     </p>
                                 </div>
                                 <div class="payment-image text-center mb-25">

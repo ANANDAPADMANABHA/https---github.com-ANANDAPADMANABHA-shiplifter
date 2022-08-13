@@ -18,6 +18,7 @@ class CartItem(models.Model):
     quantity    =   models.IntegerField()
     cartprice = models.FloatField(null = True)
     is_active   =   models.BooleanField(default=True)
+    buy_now =   models.BooleanField(default=False)
 
     def sub_total(self):
         return self.product.price * self.quantity

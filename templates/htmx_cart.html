@@ -40,7 +40,7 @@
                 </div>
           </td>
           <!-- there are two functions for deleting the cart because in my code we dont create cartid for logged in user if he create a cart -->
-          <td class="product-subtotal"><span class="amount">{{cart_item.cartprice}}</span></td>
+          <td class="product-subtotal"><span class="amount">₹{{cart_item.cartprice}}</span></td>
           
           <td class="product-remove">
             <span 
@@ -56,6 +56,8 @@
     </tbody>
 </table>
 </div>
+{% if user.is_authenticated %}
+
 <form action="{% url 'couponapply' %}" method="POST">
  {% csrf_token %}
 <div class="row">
@@ -74,15 +76,19 @@
          </div>
    </div>
  </form>
+{% else %}
+
+{% endif %}
+
 </div>
 <div class="row justify-content-end">
    <div class="col-md-5">
          <div class="cart-page-total">
             <h2>Cart totals</h2>
             <ul class="mb-20">
-               <li>Subtotal <span>{{total}}</span></li>
-               <li>tax <span>{{tax}}</span></li>
-               <li>Total <span>{{grand_total}}</span></li>
+               <li>Subtotal <span>₹{{total}}</span></li>
+               <li>tax <span>₹{{tax}}</span></li>
+               <li>Total <span>₹{{grand_total}}</span></li>
             </ul>
             <a class="tp-btn-h1" href="{% url 'checkout' %}">Proceed to checkout</a>
          </div>

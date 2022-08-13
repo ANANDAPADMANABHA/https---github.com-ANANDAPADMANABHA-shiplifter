@@ -19,9 +19,6 @@
                                 
                                 <span class="discount">-{{x.max_offer}}% OFFER</span>
 
-                          
-                           
-
                                 </div>
                                 <div class="product-action product-action-2">
                                     <a href="#" class="icon-box icon-box-1" data-bs-toggle="modal" data-bs-target="#productModalId">
@@ -53,10 +50,10 @@
                                 <div class="price mb-20">
                                     
                                     {% if x.offer_price %}
-                                    MRP: <del>{{x.price}} $</del> <br>
-                                    <span>   {{x.offer_price}} $</span>
+                                    MRP: <del>{{x.price}} ₹</del> <br>
+                                    <span>   {{x.offer_price}} ₹</span>
                                     {% else %}
-                                    <span>{{x.price}} $</span>
+                                    <span>{{x.price}} ₹</span>
                                     {% endif %}
 
 
