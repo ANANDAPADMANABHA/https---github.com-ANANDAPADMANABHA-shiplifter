@@ -139,16 +139,22 @@
                             
 
                             <div class="payment-method">
-                                
+                                {% if Buynow == 1 %}
                                 <div class="order-button-payment mt-20">
-                                <button type="submit" class="tp-btn-h1"><a href="{% url 'placecod' %}">Cash on delivery</a></button>
+                                <button type="submit" class="tp-btn-h1"><a href="{% url 'placecodBuynow' %}">Cash on delivery</a></button>
                                 </div>
+                                {% else %}
                                 <div class="order-button-payment mt-20">
-                                  <button type="submit" class="tp-btn-h1"><a href="{% url 'razorpayhome' %}">Razorpay</a></button>
-                                </div>
-                                <div class="order-button-payment mt-20">
-                                  <button type="submit" class="tp-btn-h1"><a href="{% url 'paypal' %}">paypal</a></button>
-                                </div>
+                                  <button type="submit" class="tp-btn-h1"><a href="{% url 'placecod' %}">Cash on delivery</a></button>
+                                  </div>
+                                  <div class="order-button-payment mt-20">
+                                    <button type="submit" class="tp-btn-h1"><a href="{% url 'razorpayhome' %}">Razorpay</a></button>
+                                  </div>
+                                  <div class="order-button-payment mt-20">
+                                    <button type="submit" class="tp-btn-h1"><a href="{% url 'paypal' %}">paypal</a></button>
+                                  </div>
+                                {% endif %}
+                               
                                
                                 
                                 

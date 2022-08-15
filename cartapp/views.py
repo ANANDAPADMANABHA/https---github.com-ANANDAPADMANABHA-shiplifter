@@ -700,6 +700,9 @@ def confirmpayment(request):
             cart_items  = CartItem.objects.filter(user = request.user, is_active = True)
             if CartItem.objects.filter(user = request.user,buy_now = True) :
                     cart_items  =   CartItem.objects.filter(user = request.user,buy_now = True)
+                    Buynow = True
+            else:
+                Buynow = False
             for cart_item in cart_items:
                 total += (cart_item.product.offer_price() * cart_item.quantity)
                 quantity += cart_item.quantity
@@ -717,20 +720,18 @@ def confirmpayment(request):
         'tax':tax,
         'grand_total':grand_total,
         'details':details,
+        'Buynow':Buynow
         
         }
         
 
     else:
         return redirect(cartview)
-
-    
     return render(request,'confirmorderinvoice.html',context)
 
+
 @cache_control(no_cache =True, must_revalidate =True, no_store =True)
-
-def placecod(request):
-
+def placecodBuynow(request):
 
     total = 0
     quantity = 0
@@ -740,7 +741,7 @@ def placecod(request):
     if request.user.is_authenticated:
 
         if 'coupon_code' in request.session:
-            print('couponnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn')
+            
             coupon = Coupon.objects.get(coupon_code =request.session['coupon_code'])
             reduction = coupon.discount 
 
@@ -750,10 +751,104 @@ def placecod(request):
 
             details = Address.objects.get(id = theaddress ) #passed that spesific address in the details variable
             order_id_generated = str(int(datetime.datetime.now().strftime('%Y%m%d%H%M%S')))
+            
             user =  request.user
-            cart_items  = CartItem.objects.filter(user = request.user, is_active = True)
+            
             if CartItem.objects.filter(user = request.user,buy_now = True) :
-                    cart_items  =   CartItem.objects.filter(user = request.user,buy_now = True)
+                cart_items  =   CartItem.objects.filter(user = request.user,buy_now = True)
+            
+            for cart_item in cart_items:
+                total += (cart_item.product.offer_price() * cart_item.quantity)
+                tax = (2*total)/100
+            grand_total = total + tax-reduction
+            if grand_total <0:
+                grand_total = tax
+                
+
+            dates =date.today()   
+            paymethod = 'COD'
+            pay = Payment(user=request.user,payment_method =paymethod,amount_paid=grand_total ,status='Pending',created_at=dates)
+            pay.save()
+
+            oder = Orders(user=user,address=details ,ordertotal = total,orderid =order_id_generated,date=dates,payment =pay)
+            oder.save()
+
+            
+            
+            
+            for x in cart_items:
+                order = Orders.objects.get(orderid = order_id_generated)
+                Orderproduct = OrderProduct(order=order)
+                product = Product.objects.get(id = x.product.id)
+                Orderproduct.product = x.product
+                Orderproduct.quantity = x.quantity
+                Orderproduct.price = x.cartprice
+                product.stock -=  x.quantity
+                product.save()
+                Orderproduct.save()
+                
+
+            for x in cart_items:
+                x.delete()
+            
+        except :
+
+            redirect("userhome")
+
+        
+    else:
+        return redirect(cartview)
+    try:    
+        order = Orders.objects.get(orderid = order_id_generated)
+        order.is_ordered = True
+        order.save()
+        Orderproduct = OrderProduct.objects.filter(order=order)
+
+        if 'coupon_code' in request.session:
+            coupons = Coupon.objects.get(coupon_code =request.session['coupon_code'])
+            x = UsedCoupon(user = request.user , coupon =coupons )
+            x.save()
+            del request.session['coupon_code']
+            
+    except:
+        return redirect("userhome")
+    context = {
+    'total':total,
+    'quantity':quantity,
+    'Orderproduct':Orderproduct,
+    'tax':tax,
+    'grand_total':pay.amount_paid,
+    'details':details,
+        }
+
+    return render(request,'bill.html',context)
+
+@cache_control(no_cache =True, must_revalidate =True, no_store =True)
+def placecod(request):
+
+    total = 0
+    quantity = 0
+    cart_items =None
+    tax = 0
+    grand_total =0
+    if request.user.is_authenticated:
+
+        if 'coupon_code' in request.session:
+            
+            coupon = Coupon.objects.get(coupon_code =request.session['coupon_code'])
+            reduction = coupon.discount 
+
+        else :
+            reduction = 0
+        try:
+
+            details = Address.objects.get(id = theaddress ) #passed that spesific address in the details variable
+            order_id_generated = str(int(datetime.datetime.now().strftime('%Y%m%d%H%M%S')))
+            
+            user =  request.user
+            
+           
+            cart_items  = CartItem.objects.filter(user = request.user, is_active = True)
             cart_itemcount = cart_items.count()
             if cart_itemcount <= 0 :
                 return redirect('userhome')
@@ -769,20 +864,12 @@ def placecod(request):
             paymethod = 'COD'
             pay = Payment(user=request.user,payment_method =paymethod,amount_paid=grand_total ,status='Pending',created_at=dates)
             pay.save()
-            
-            oder = Orders(user=user,address=details ,ordertotal = total,orderid =order_id_generated,date=dates,payment =pay)
 
+            oder = Orders(user=user,address=details ,ordertotal = total,orderid =order_id_generated,date=dates,payment =pay)
             oder.save()
 
             
-            cart_items  = CartItem.objects.filter(user = request.user, is_active = True)
-            if CartItem.objects.filter(user = request.user,buy_now = True) :
-                    cart_items  =   CartItem.objects.filter(user = request.user,buy_now = True)
             
-            
-
-
-
             for x in cart_items:
                 order = Orders.objects.get(orderid = order_id_generated)
                 Orderproduct = OrderProduct(order=order)
@@ -790,13 +877,6 @@ def placecod(request):
                 Orderproduct.product = x.product
                 Orderproduct.quantity = x.quantity
                 Orderproduct.price = x.cartprice
-                print("******************************************************************")
-
-                print(product.stock)
-                print("******************************************************************")
-
-                print(x.quantity)
-                print("******************************************************************")
                 product.stock -=  x.quantity
                 product.save()
                 Orderproduct.save()
@@ -805,14 +885,10 @@ def placecod(request):
             for x in cart_items:
                 x.delete()
             
-            
-
         except ObjectDoesNotExist:
             pass #just ignore
 
         
-        
-
     else:
         return redirect(cartview)
         
@@ -834,9 +910,10 @@ def placecod(request):
     'tax':tax,
     'grand_total':pay.amount_paid,
     'details':details,
-        
         }
+
     return render(request,'bill.html',context)
+
 
 # -------------------------------------------------------------------------------------------------------------
 def paypal(request):
