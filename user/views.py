@@ -1,14 +1,10 @@
-from ast import Try
-from asyncio.windows_events import NULL
-from calendar import c
-import imp
-from itertools import product
-import random
+
+
+
 import re
-from unicodedata import name
 from django.contrib import messages
 from django.contrib.auth import authenticate,login,logout
-from django.core.paginator import Paginator ,EmptyPage, InvalidPage
+from django.core.paginator import Paginator 
 from django.shortcuts import redirect, render
 from orders.models import OrderProduct, Orders
 from theproducts.models import Categoryies, Product
@@ -16,8 +12,8 @@ from accounts.models import *
 from cartapp.models import *
 from twilio.rest import Client
 from django.contrib import auth
-from cartapp.views import _cart_id, checkout
-import user 
+from cartapp.views import _cart_id
+
 from myadmin.models import *
 from django.conf import settings
 from django.views.decorators.cache import cache_control

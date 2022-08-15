@@ -1,24 +1,17 @@
-from asyncio.windows_events import NULL
-from collections import Counter
+
 from datetime import datetime
 import datetime
-from urllib import response
-# from itertools import count
 from django.contrib import messages
 from django.shortcuts import render,redirect
 from django.contrib.auth import authenticate,login,logout
-from razorpay import Order
-from django.db.models import Sum,Count
 from accounts.models import Account
-from cartapp.models import CartItem, Coupon
+from cartapp.models import Coupon
 from myadmin.models import Banner
 from orders.models import OrderProduct, Orders, Payment
 from theproducts.models import Product , Categoryies
 from django.views.decorators.cache import cache_control
-from django.core.paginator import Paginator ,EmptyPage, InvalidPage,PageNotAnInteger
-from django.db.models.functions import TruncDate
-from django.db.models import Sum,Count
-from django.http import HttpResponse, JsonResponse
+from django.core.paginator import Paginator 
+from django.http import JsonResponse
 
 # Create your views here.
 

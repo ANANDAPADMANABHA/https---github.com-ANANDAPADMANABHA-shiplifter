@@ -1,23 +1,18 @@
-from http import client
-import imp
-from itertools import product
-from django.http import HttpResponse, JsonResponse
+
+
+
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.core.exceptions import ObjectDoesNotExist
 import razorpay
 from django.conf import settings
 import json
-import random
-import re
 from django.contrib import messages
-from django.contrib.auth import authenticate,login,logout
 import datetime
 from django.shortcuts import redirect, render
 from theproducts.models import Product
 from accounts.models import Account , Address
 from cartapp.models import Cart, CartItem
-from django.http import HttpResponse
-from django.contrib import auth
 from orders.models import OrderProduct, Orders, Payment
 from datetime import date 
 from user.views import *
