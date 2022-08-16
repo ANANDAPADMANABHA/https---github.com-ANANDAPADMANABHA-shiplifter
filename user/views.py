@@ -1,6 +1,4 @@
 
-
-
 import re
 from django.contrib import messages
 from django.contrib.auth import authenticate,login,logout
@@ -13,7 +11,6 @@ from cartapp.models import *
 from twilio.rest import Client
 from django.contrib import auth
 from cartapp.views import _cart_id
-
 from myadmin.models import *
 from django.conf import settings
 from django.views.decorators.cache import cache_control
@@ -30,27 +27,32 @@ def home(request):
 
         cartclear = CartItem.objects.filter(buy_now = True , user = request.user)
         cartclear.delete()
-        
-    acc= Account.objects.all()
-    cat = Categoryies.objects.get(category_name = 'limited deal')
-    values1 = Product.objects.filter(category =cat )
+    try:
 
-    cat1 = Categoryies.objects.get(category_name = 'demand')
-    values2 = Product.objects.filter(category =cat1 )
+        acc= Account.objects.all()
+        cat = Categoryies.objects.get(category_name = 'limited deal')
+        values1 = Product.objects.filter(category =cat )
 
-    cat2 = Categoryies.objects.get(category_name = 'Hot Trending Products')
-    values3 = Product.objects.filter(category =cat2 )
+        cat1 = Categoryies.objects.get(category_name = 'demand')
+        values2 = Product.objects.filter(category =cat1 )
 
-    banner = Banner.objects.filter(is_selected = True)
-    cat3 = Categoryies.objects.get(category_name = 'Laptops')
+        cat2 = Categoryies.objects.get(category_name = 'Hot Trending Products')
+        values3 = Product.objects.filter(category =cat2 )
 
-    hot = Product.objects.filter(category =cat2 )[0:4]
-    onsale = Product.objects.filter(category =cat1 )[0:4]
-    laps = Product.objects.filter(category =cat3 )[0:4]
+        banner = Banner.objects.filter(is_selected = True)
+        cat3 = Categoryies.objects.get(category_name = 'Laptops')
+
+        hot = Product.objects.filter(category =cat2 )[0:4]
+        onsale = Product.objects.filter(category =cat1 )[0:4]
+        laps = Product.objects.filter(category =cat3 )[0:4]
+
+        return render(request,'index.html',{'values':values1,'acc':acc ,'values2':values2,'values3':values3,'banner':banner,'hot':hot,'onsale':onsale,'laps':laps})
+    except:
+        return render(request,'index.html')
 
 
 
-    return render(request,'index.html',{'values':values1,'acc':acc ,'values2':values2,'values3':values3,'banner':banner,'hot':hot,'onsale':onsale,'laps':laps})
+    
 
 @cache_control(no_cache =True, must_revalidate =True, no_store =True)
 def signin(request):
